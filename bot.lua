@@ -6,8 +6,8 @@ notify = lgi.require('Notify')
 notify.init ("Telegram updates")
 chats = {}
 day = 86400
-bot_id = 259424620 -- Your Bot USER_ID
-sudo_users = {250049437,000000000--[[YOUE ID :|]]}
+bot_id = 259424620
+sudo_users = {250049437}
   -----------------------------------------------------------------------------------------------
                                      -- start functions --
   -----------------------------------------------------------------------------------------------
@@ -530,8 +530,8 @@ function tdcli_update_callback(data)
       for k,v in pairs(sudo_users) do
         send(v, 0, 1, "شارژ این گروه به اتمام رسید \nLink : "..(database:get("bot:group:link"..msg.chat_id_) or "تنظیم نشده").."\nID : "..msg.chat_id_..'\n\nدر صورتی که میخواهید ربات این گروه را ترک کند از دستور زیر استفاده کنید\n\n/leave'..msg.chat_id_..'\nبرای جوین دادن توی این گروه میتونی از دستور زیر استفاده کنی:\n/join'..msg.chat_id_..'\n_________________\nدر صورتی که میخواهید گروه رو دوباره شارژ کنید میتوانید از کد های زیر استفاده کنید...\n\n<code>برای شارژ 1 ماهه:</code>\n/plan1'..msg.chat_id_..'\n\n<code>برای شارژ 3 ماهه:</code>\n/plan2'..msg.chat_id_..'\n\n<code>برای شارژ نامحدود:</code>\n/plan3'..msg.chat_id_, 1, 'html')
       end
-        send(msg.chat_id_, 0, 1, 'شارژ این گروه به اتمام رسید و ربات در گروه غیر فعال شد...\nبرای تمدید کردن ربات به @MehdiHS پیام دهید.\nدر صورت ریپورت بودن میتوانید با ربات زیر با ما در ارتباط باشید:\n @BlackSupport_Bot', 1, 'html')
-        send(msg.chat_id_, 0, 1, 'ربات به دلایلی گروه را ترک میکند\nبرای اطلاعات بیشتر میتوانید با @MehdiHS در ارتباط باشید.\nدر صورت ریپورت بودن میتوانید با ربات زیر به ما پیام دهید\n@BlackSupport_Bot\n\nChannel> @Black_Ch', 1, 'html')
+        send(msg.chat_id_, 0, 1, 'شارژ این گروه به اتمام رسید و ربات در گروه غیر فعال شد...\nبرای تمدید کردن ربات به @MohammadNBG پیام دهید.\nدر صورت ریپورت بودن میتوانید با ربات زیر با ما در ارتباط باشید:\n @MohammadNBGBot', 1, 'html')
+        send(msg.chat_id_, 0, 1, 'ربات به دلایلی گروه را ترک میکند\nبرای اطلاعات بیشتر میتوانید با @MohammadNBG در ارتباط باشید.\nدر صورت ریپورت بودن میتوانید با ربات زیر به ما پیام دهید\n@MohamamdNBGBot\n\nChannel> @IranDevTeam', 1, 'html')
 	   chat_leave(msg.chat_id_, bot_id)
       end
     end
@@ -575,7 +575,7 @@ function tdcli_update_callback(data)
 						user_id = msg.sender_user_id_
 						local bhash =  'bot:banned:'..msg.chat_id_
                         database:sadd(bhash, user_id)
-                           send(msg.chat_id_, msg.id_, 1, '> _ID_  *('..msg.sender_user_id_..')* \n_Spamming Not Allowed Here._\n`Spammer Banned!!`', 1, 'md')
+                           send(msg.chat_id_, msg.id_, 1, 'Spamming Not Allowed Here\nUsername Spammber : *['..msg.sender_user_id_..']*\n`Spammer Banned From Group`', 1, 'md')
 					  end
                     end
                     database:setex(hash, floodTime, msgs+1)
@@ -1938,9 +1938,9 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 local function getpro(extra, result, success)
 local user_msgs = database:get('user:msgs'..msg.chat_id_..':'..msg.sender_user_id_)
    if result.photos_[0] then
-            sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[0].sizes_[1].photo_.persistent_id_,'> Supergroup ID: '..msg.chat_id_..'\n> Your ID: '..msg.sender_user_id_..'\n> Number of your Msgs: '..user_msgs,msg.id_,msg.id_)
+            send(msg.chat_id_, msg.id_, 1, "*Supergroup ID:* `"..msg.chat_id_.."`\n*Your ID:* `"..msg.sender_user_id_.."`", 1, 'md')
    else
-      send(msg.chat_id_, msg.id_, 1, "You Have'nt Profile Photo!!\n\n> *Supergroup ID:* `"..msg.chat_id_.."`\n*> Your ID:* `"..msg.sender_user_id_.."`\n*> Number of your Msgs: *`"..user_msgs.."`", 1, 'md')
+      send(msg.chat_id_, msg.id_, 1, "*Supergroup ID:* `"..msg.chat_id_.."`\n*> Your ID:* `"..msg.sender_user_id_.."`", 1, 'md')
    end
    end
    tdcli_function ({
@@ -1951,7 +1951,7 @@ local user_msgs = database:get('user:msgs'..msg.chat_id_..':'..msg.sender_user_i
   }, getpro, nil)
 	end
 	-----------------------------------------------------------------------------------------------
-    if text:match("^[#!/]getpro (%d+)$") and msg.reply_to_message_id_ == 0  then
+    if text:match("^[#!/]profileme (%d+)$") and msg.reply_to_message_id_ == 0  then
 		local pronumb = {string.match(text, "^[#/!](getpro) (%d+)$")} 
 local function gpro(extra, result, success)
 --vardump(result)
@@ -2078,7 +2078,7 @@ local function gpro(extra, result, success)
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]setlink$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
          send(msg.chat_id_, msg.id_, 1, '*Please Send Group Link Now!*', 1, 'md')
-         database:set("bot:group:link"..msg.chat_id_, 'Waiting For Link!\nPls Send Group Link.\n\nJoin My Channel > @Black_Ch')
+         database:set("bot:group:link"..msg.chat_id_, 'Waiting For Link!\nPls Send Group Link.\n\nJoin My Channel > @IranDevTeam')
 	end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]link$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
@@ -2686,7 +2686,7 @@ local function gpro(extra, result, success)
   if text:match("^[#!/]leave(-%d+)") and is_admin(msg.sender_user_id_, msg.chat_id_) then
   	local txt = {string.match(text, "^[#/!](leave)(-%d+)$")} 
 	   send(msg.chat_id_, msg.id_, 1, 'ربات با موفقیت از گروه '..txt[2]..' خارج شد.', 1, 'md')
-	   send(txt[2], 0, 1, 'ربات به دلایلی گروه را ترک میکند\nبرای اطلاعات بیشتر میتوانید با @MehdiHS در ارتباط باشید.\nدر صورت ریپورت بودن میتوانید با ربات زیر به ما پیام دهید\n@BlackSupport_Bot\n\nChannel> @Black_Ch', 1, 'html')
+	   send(txt[2], 0, 1, 'ربات به دلایلی گروه را ترک میکند\nبرای اطلاعات بیشتر میتوانید با @MohammadNBG در ارتباط باشید.\nدر صورت ریپورت بودن میتوانید با ربات زیر به ما پیام دهید\n@MohammadNBGBot\n\nChannel> @IRANDEVTEAM', 1, 'html')
 	   chat_leave(txt[2], bot_id)
   end
   -----------------------------------------------------------------------------------------------
@@ -2886,7 +2886,7 @@ familit {lastname}
 /modlist
 لیست ادمین های ربات در گروه
 
-/getpro [1-10]
+/profileme [1-10]
 دریافت عکس پروفایل شما
 مثال
 /getpro 2
