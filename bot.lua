@@ -2127,9 +2127,14 @@ local function gpro(extra, result, success)
 	end
 	end
 	-----------------------------------------------------------------------------------------------
-	if text:match("^[#!/]show edit$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*Done*', 1, 'md')
+	if text:match("^[#!/]([sS][hH][oO][wW]) ([eE][dD][Ii][tT])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
+         send(msg.chat_id_, msg.id_, 1, '*Show Edit : Enable*', 1, 'md')
          database:set('editmsg'..msg.chat_id_,'didam')
+	end
+	-----------------------------------------------------------------------------------------------
+	if text:match("^[#!/]([Uu][Nn][sS][hH][oO][wW]) ([eE][dD][Ii][tT])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
+         send(msg.chat_id_, msg.id_, 1, '*Show Edit : Disable*', 1, 'md')
+         database:del('editmsg'..msg.chat_id_,'didam')
 	end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([sS][eE][tT][lL][iI][nN][kK])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
@@ -2734,10 +2739,10 @@ local function gpro(extra, result, success)
 	if text:match("^[#!/]charge stats") and is_mod(msg.sender_user_id_, msg.chat_id_) then
     local ex = database:ttl("bot:charge:"..msg.chat_id_)
        if ex == -1 then
-		send(msg.chat_id_, msg.id_, 1, '_نامحدود!_', 1, 'md')
+		send(msg.chat_id_, msg.id_, 1, '_انقضای گروه شما نامحدود میباشد_', 1, 'md')
        else
         local d = math.floor(ex / day ) + 1
-	   		send(msg.chat_id_, msg.id_, 1, d.." روز تا انقضا گروه باقی مانده", 1, 'md')
+	   		send(msg.chat_id_, msg.id_, 1, d.." روز تا انقضای گروه باقی مانده است", 1, 'md')
        end
     end
 	-----------------------------------------------------------------------------------------------
@@ -2768,7 +2773,7 @@ local function gpro(extra, result, success)
 	   send(msg.chat_id_, msg.id_, 1, 'پلن 1 با موفقیت برای گروه '..txt[2]..' فعال شد\nاین گروه تا 30 روز دیگر اعتبار دارد! ( 1 ماه )', 1, 'md')
 	   send(txt[2], 0, 1, 'ربات با موفقیت فعال شد و تا 30 روز دیگر اعتبار دارد!', 1, 'md')
 	   for k,v in pairs(sudo_users) do
-	      send(v, 0, 1, "*User  "..msg.sender_user_id_.." Added bot to new group*" , 1, 'md')
+	      send(v, 0, 1, "*User "..msg.sender_user_id_.." Added bot to new group*" , 1, 'md')
        end
 	   database:set("bot:enable:"..txt[2],true)
   end
@@ -2818,7 +2823,7 @@ local function gpro(extra, result, success)
    if text:match('join(-%d+)') and is_admin(msg.sender_user_id_, msg.chat_id_) then
        local txt = {string.match(text, "^[#/!](join)(-%d+)$")} 
 	   send(msg.chat_id_, msg.id_, 1, 'با موفقیت تورو به گروه '..txt[3]..' اضافه کردم.', 1, 'md')
-	   send(txt[2], 0, 1, '"مدیر ربات به گروه وارد شد لطفا کاملا احترام خود را نگه دارید', 1, 'md')
+	   send(txt[2], 0, 1, '"Admin Joined!🌚', 1, 'md')
 	   add_user(txt[2], msg.sender_user_id_, 10)
   end
    -----------------------------------------------------------------------------------------------
