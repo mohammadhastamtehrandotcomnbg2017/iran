@@ -746,7 +746,7 @@ if database:get('bot:viewget'..msg.sender_user_id_) then
 		send(msg.chat_id_, msg.id_, 1, '*Error*\n`Please send this command again and forward your post(from channel)`', 1, 'md')
 		database:del('bot:viewget'..msg.sender_user_id_)
 	else
-		send(msg.chat_id_, msg.id_, 1, 'Your Post Views:\n> '..msg.views_..' View!', 1, 'md')
+		send(msg.chat_id_, msg.id_, 1, '_تعداد بازدید پست شما_: '..msg.views_..' View!', 1, 'md')
         database:del('bot:viewget'..msg.sender_user_id_)
 	end
 end
@@ -1324,8 +1324,8 @@ elseif msg_type == 'MSG:Text' then
 	  local glink = text:match("(https://telegram.me/joinchat/%S+)")
       local hash = "bot:group:link"..msg.chat_id_
                database:set(hash,glink)
-			  send(msg.chat_id_, msg.id_, 1, '*New link Set!*', 1, 'md')
-			  send(msg.chat_id_, 0, 1, '<b>New Group link:</b>\n'..glink, 1, 'html')
+			  send(msg.chat_id_, msg.id_, 1, '_لینک گروه تنظیم شد_', 1, 'md')
+			  send(msg.chat_id_, 0, 1, '_لینک گروه :_\n'..glink, 1, 'html')
       end
    end
     function check_username(extra,result,success)
@@ -1443,10 +1443,10 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function promote_by_reply(extra, result, success)
 	local hash = 'bot:mods:'..msg.chat_id_
 	if database:sismember(hash, result.sender_user_id_) then
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _is Already moderator._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _از قبل مقام دستیار مدیر را داشته است_', 1, 'md')
 	else
          database:sadd(hash, result.sender_user_id_)
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _promoted as moderator._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _به مقام دستیار مدیر ارتقاء یافت_', 1, 'md')
 	end
     end
 	      getMessage(msg.chat_id_, msg.reply_to_message_id_,promote_by_reply)
@@ -1457,9 +1457,9 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function promote_by_username(extra, result, success)
 	if result.id_ then
 	        database:sadd('bot:mods:'..msg.chat_id_, result.id_)
-            texts = '<b>User </b><code>'..result.id_..'</code> <b>promoted as moderator.!</b>'
+            texts = '_کاربر_ <code>@'..result.id_..'</code> _به مقام دستیار مدیر ارتقاء یافت_'
             else 
-            texts = '<code>User not found!</code>'
+            texts = '<code>این کاربر در گروه یافت نشد</code>'
     end
 	         send(msg.chat_id_, msg.id_, 1, texts, 1, 'html')
     end
@@ -1469,17 +1469,17 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	if text:match("^[#!/]([pP][rR][Oo][mM][oO][Tt][eE]) (%d+)$") and is_owner(msg.sender_user_id_, msg.chat_id_) then
 	local ap = {string.match(text, "^[#/!]([pP][rR][Oo][mM][oO][Tt][eE]) (%d+)$")} 	
 	        database:sadd('bot:mods:'..msg.chat_id_, ap[2])
-	send(msg.chat_id_, msg.id_, 1, '_User_ *'..ap[2]..'* _promoted as moderator._', 1, 'md')
+	send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..ap[2]..'* _به مقام دستیار مدیر ارتقاء یافت_', 1, 'md')
     end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([dD][eE][mM][oO][Tt][eE])$") and is_owner(msg.sender_user_id_, msg.chat_id_) and msg.reply_to_message_id_ then
 	function demote_by_reply(extra, result, success)
 	local hash = 'bot:mods:'..msg.chat_id_
 	if not database:sismember(hash, result.sender_user_id_) then
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _is not Promoted._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _از قبل مدیر نبوده است!_', 1, 'md')
 	else
          database:srem(hash, result.sender_user_id_)
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _Demoted._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _از مقام مدیری عزل شد و اکنون یک کاربر عادی میباشد_', 1, 'md')
 	end
     end
 	      getMessage(msg.chat_id_, msg.reply_to_message_id_,demote_by_reply)
@@ -1491,9 +1491,9 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function demote_by_username(extra, result, success)
 	if result.id_ then
          database:srem(hash, result.id_)
-            texts = '<b>User </b><code>'..result.id_..'</code> <b>Demoted</b>'
+            _texts = '_کاربر_ <code>@'..result.id_..'</code> _از مقام مدیری عزل شد و اکنون یک کاربر عادی میباشد_'
             else 
-            texts = '<code>User not found!</code>'
+            texts = '<code>این کاربر در گروه یافت نشد</code>'
     end
 	         send(msg.chat_id_, msg.id_, 1, texts, 1, 'html')
     end
@@ -1504,21 +1504,21 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	local hash = 'bot:mods:'..msg.chat_id_
 	local ap = {string.match(text, "^[#/!]([dD][eE][mM][oO][Tt][eE]) (%d+)$")} 	
          database:srem(hash, ap[2])
-	send(msg.chat_id_, msg.id_, 1, '_User_ *'..ap[2]..'* _Demoted._', 1, 'md')
+	send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..ap[2]..'* _از مقام مدیری عزل شد و اکنون یک کاربر عادی میباشد_', 1, 'md')
     end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([bB][aA][nN])$") and is_mod(msg.sender_user_id_, msg.chat_id_) and msg.reply_to_message_id_ then
 	function ban_by_reply(extra, result, success)
 	local hash = 'bot:banned:'..msg.chat_id_
 	if is_mod(result.sender_user_id_, result.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*You Can,t [Kick/Ban] Moderators!!*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_شما نمیتوانید افراد مقام دار را بن کنید!_', 1, 'md')
     else
     if database:sismember(hash, result.sender_user_id_) then
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _is Already Banned._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _از قبل بن شده است_', 1, 'md')
 		 chat_kick(result.chat_id_, result.sender_user_id_)
 	else
          database:sadd(hash, result.sender_user_id_)
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _Banned._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _از گروه بن شد_', 1, 'md')
 		 chat_kick(result.chat_id_, result.sender_user_id_)
 	end
     end
@@ -1531,14 +1531,14 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function ban_by_username(extra, result, success)
 	if result.id_ then
 	if is_mod(result.id_, msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*You Can,t [Kick/Ban] Moderators!!*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_شما نمیتوانید افراد مقام دار را بن کنید!_', 1, 'md')
     else
 	        database:sadd('bot:banned:'..msg.chat_id_, result.id_)
-            texts = '<b>User </b><code>'..result.id_..'</code> <b>Banned.!</b>'
+            texts = '_کاربر_ <code>@'..result.id_..'</code> _از گروه بن شد_'
 		 chat_kick(msg.chat_id_, result.id_)
 	end
             else 
-            texts = '<code>User not found!</code>'
+            texts = '<code>این کاربر در گروه وجود ندارد</code>'
     end
 	         send(msg.chat_id_, msg.id_, 1, texts, 1, 'html')
     end
@@ -1548,20 +1548,20 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	if text:match("^[#!/]([bB][aA][nN]) (%d+)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local ap = {string.match(text, "^[#/!]([bB][aA][nN]) (%d+)$")}
 	if is_mod(ap[2], msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*You Can,t [Kick/Ban] Moderators!!*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_شما نمیتوانید افراد مقام دار را بن کنید!_', 1, 'md')
     else
 	        database:sadd('bot:banned:'..msg.chat_id_, ap[2])
 		 chat_kick(msg.chat_id_, ap[2])
-	send(msg.chat_id_, msg.id_, 1, '_User_ *'..ap[2]..'* _Banned._', 1, 'md')
+	send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..ap[2]..'* _از گروه بن شد_', 1, 'md')
 	end
     end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([dD][eE][lL][aA][lL][Ll])$") and is_owner(msg.sender_user_id_, msg.chat_id_) and msg.reply_to_message_id_ then
 	function delall_by_reply(extra, result, success)
 	if is_mod(result.sender_user_id_, result.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*You Can,t Delete Msgs from Moderators!!*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_شما نمیتوانید پیام افراد دارای مقام را پاک کنید_', 1, 'md')
     else
-         send(msg.chat_id_, msg.id_, 1, '_All Msgs from _ *'..result.sender_user_id_..'* _Has been deleted!!_', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_تمامی پیام های کاربر _ *'..result.sender_user_id_..'* _حذف شد_', 1, 'md')
 		     del_all_msgs(result.chat_id_, result.sender_user_id_)
     end
 	end
@@ -1571,10 +1571,10 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	if text:match("^[#!/]([dD][eE][lL][aA][lL][Ll]) (%d+)$") and is_owner(msg.sender_user_id_, msg.chat_id_) then
 		local ass = {string.match(text, "^[#/!]([dD][eE][lL][aA][lL][Ll]) (%d+)$")} 
 	if is_mod(ass[2], msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*You Can,t Delete Msgs from Moderators!!*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_شما نمیتوانید پیام افراد دارای مقام را پاک کنید_', 1, 'md')
     else
 	 		     del_all_msgs(msg.chat_id_, ass[2])
-         send(msg.chat_id_, msg.id_, 1, '<b>All Msg From user</b> <code>'..ass[2]..'</code> <b>Deleted!</b>', 1, 'html')
+         send(msg.chat_id_, msg.id_, 1, '_تمامی پیام های کاربر _  <code>'..ass[2]..'</code> _حذف شد_', 1, 'html')
     end
 	end
 	-----------------------------------------------------------------------------------------------
@@ -1583,13 +1583,13 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function delall_by_username(extra, result, success)
 	if result.id_ then
 	if is_mod(result.id_, msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*You Can,t Delete Msgs from Moderators!!*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_شما نمیتوانید پیام افراد دارای مقام را پاک کنید_', 1, 'md')
 		 return false
     end
 		 		     del_all_msgs(msg.chat_id_, result.id_)
-            text = '<b>All Msg From user</b> <code>'..result.id_..'</code> <b>Deleted!</b>'
+            text = '_تمامی پیام های کاربر _ <code>'..result.id_..'</code> _حذف شد_'
             else 
-            text = '<code>User not found!</code>'
+            text = '<code>این کاربر در گروه یافت نشد</code>'
     end
 	         send(msg.chat_id_, msg.id_, 1, text, 1, 'html')
     end
@@ -1600,10 +1600,10 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function unban_by_reply(extra, result, success)
 	local hash = 'bot:banned:'..msg.chat_id_
 	if not database:sismember(hash, result.sender_user_id_) then
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _is not Banned._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _از قبل بن نشده است!_', 1, 'md')
 	else
          database:srem(hash, result.sender_user_id_)
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _Unbanned._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _با موفقیت آنبن شد_', 1, 'md')
 	end
     end
 	      getMessage(msg.chat_id_, msg.reply_to_message_id_,unban_by_reply)
@@ -1614,9 +1614,9 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function unban_by_username(extra, result, success)
 	if result.id_ then
          database:srem('bot:banned:'..msg.chat_id_, result.id_)
-            text = '<b>User </b><code>'..result.id_..'</code> <b>Unbanned.!</b>'
+            text = '_کاربر_ <code>@'..result.id_..'</code> _با موفقیت آنبن شد_'
             else 
-            text = '<code>User not found!</code>'
+            text = '<code>این کاربر در گروه یافت نشد!</code>'
     end
 	         send(msg.chat_id_, msg.id_, 1, text, 1, 'html')
     end
@@ -1626,20 +1626,20 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	if text:match("^[#!/]([uU][nN][bB][aA][nN]) (%d+)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local ap = {string.match(text, "^[#/!]([uU][nN][bB][aA][nN]) (%d+)$")} 	
 	        database:srem('bot:banned:'..msg.chat_id_, ap[2])
-	send(msg.chat_id_, msg.id_, 1, '_User_ *'..ap[2]..'* _Unbanned._', 1, 'md')
+	send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..ap[2]..'* _با موفقیت آنبن شد_', 1, 'md')
     end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/][mM][Uu][tT][eE][Uu][Ss][Ee][rR]$") and is_mod(msg.sender_user_id_, msg.chat_id_) and msg.reply_to_message_id_ then
 	function mute_by_reply(extra, result, success)
 	local hash = 'bot:muted:'..msg.chat_id_
 	if is_mod(result.sender_user_id_, result.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*You Can,t [Mute] Moderators!!*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_شما نمیتوانید مقام بالاتر از خود را موت کنید_', 1, 'md')
     else
     if database:sismember(hash, result.sender_user_id_) then
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _is Already Muted._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _از قبل در  لیست افراد سکوت بوده است_', 1, 'md')
 	else
          database:sadd(hash, result.sender_user_id_)
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _Muted._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _به لیست افراد سکوت اضافه شد._', 1, 'md')
 	end
     end
 	end
@@ -1651,14 +1651,14 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function mute_by_username(extra, result, success)
 	if result.id_ then
 	if is_mod(result.id_, msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*You Can,t [Mute] Moderators!!*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_شما نمیتوانید مقام بالاتر از خود را موت کنید_', 1, 'md')
     else
 	        database:sadd('bot:muted:'..msg.chat_id_, result.id_)
-            texts = '<b>User </b><code>'..result.id_..'</code> <b>Muted.!</b>'
+            texts = '_کاربر_ <code>@'..result.id_..'</code> _به لیست افراد سکوت اضافه شد._'
 		 chat_kick(msg.chat_id_, result.id_)
 	end
             else 
-            texts = '<code>User not found!</code>'
+            texts = '<code>کاربرمورد نظر در گروه یافت نشد!</code>'
     end
 	         send(msg.chat_id_, msg.id_, 1, texts, 1, 'html')
     end
@@ -1668,10 +1668,10 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	if text:match("^[#!/]([mM][Uu][tT][eE][Uu][Ss][Ee][rR]) (%d+)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local ap = {string.match(text, "^[#/!]([mM][Uu][tT][eE][Uu][Ss][Ee][rR]) (%d+)$")}
 	if is_mod(ap[2], msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*You Can,t [Mute] Moderators!!*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_شما نمیتوانید مقام بالاتر از خود را موت کنید_', 1, 'md')
     else
 	        database:sadd('bot:muted:'..msg.chat_id_, ap[2])
-	send(msg.chat_id_, msg.id_, 1, '_User_ *'..ap[2]..'* _Muted._', 1, 'md')
+	send(msg.chat_id_, msg.id_, 1, '_کاربر_*'..ap[2]..'* _به لیست افراد سکوت اضافه شد.__', 1, 'md')
 	end
     end
 	-----------------------------------------------------------------------------------------------
@@ -1679,10 +1679,10 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function unmute_by_reply(extra, result, success)
 	local hash = 'bot:muted:'..msg.chat_id_
 	if not database:sismember(hash, result.sender_user_id_) then
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _is not Muted._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _از قبل به لیست افراد سکوت اضافه نشده بود._', 1, 'md')
 	else
          database:srem(hash, result.sender_user_id_)
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _Unmuted._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _از لیست افراد سکوت حذف گردید._', 1, 'md')
 	end
     end
 	      getMessage(msg.chat_id_, msg.reply_to_message_id_,unmute_by_reply)
@@ -1693,9 +1693,9 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function unmute_by_username(extra, result, success)
 	if result.id_ then
          database:srem('bot:muted:'..msg.chat_id_, result.id_)
-            text = '<b>User </b><code>'..result.id_..'</code> <b>Unmuted.!</b>'
+            text = '_کاربر_ <code>@'..result.id_..'</code> _از لیست افراد سکوت حذف گردید._'
             else 
-            text = '<code>User not found!</code>'
+            text = '<code>کاربرمورد نظر در گروه یافت نشد!</code>'
     end
 	         send(msg.chat_id_, msg.id_, 1, text, 1, 'html')
     end
@@ -1705,17 +1705,17 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	if text:match("^[#!/]([uU][nN][mM][Uu][tT][eE][Uu][Ss][Ee][rR]) (%d+)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local ap = {string.match(text, "^[#/!]([uU][nN][mM][Uu][tT][eE][Uu][Ss][Ee][rR]) (%d+)$")} 	
 	        database:srem('bot:muted:'..msg.chat_id_, ap[2])
-	send(msg.chat_id_, msg.id_, 1, '_User_ *'..ap[2]..'* _Unmuted._', 1, 'md')
+	send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..ap[2]..'* _از لیست افراد سکوت حذف گردید._', 1, 'md')
     end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]setowner$") and is_admin(msg.sender_user_id_) and msg.reply_to_message_id_ then
 	function setowner_by_reply(extra, result, success)
 	local hash = 'bot:owners:'..msg.chat_id_
 	if database:sismember(hash, result.sender_user_id_) then
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _is Already Owner._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _از قبل به مدیر کل گروه یافته بود._', 1, 'md')
 	else
          database:sadd(hash, result.sender_user_id_)
-         send(msg.chat_id_, msg.id_, 1, '_User_ *'..result.sender_user_id_..'* _Promoted as Group Owner._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..result.sender_user_id_..'* _به مقام مدیر کل گروه ارتقاء یافت_', 1, 'md')
 	end
     end
 	      getMessage(msg.chat_id_, msg.reply_to_message_id_,setowner_by_reply)
@@ -1726,9 +1726,9 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function setowner_by_username(extra, result, success)
 	if result.id_ then
 	        database:sadd('bot:owners:'..msg.chat_id_, result.id_)
-            texts = '<b>User </b><code>'..result.id_..'</code> <b>Promoted as Group Owner.!</b>'
+            texts = '_کاربر_ <code>@'..result.id_..'</code> _به مقام مدیر کل گروه ارتقاء یافت_'
             else 
-            texts = '<code>User not found!</code>'
+            texts = '<code>کاربرمورد نظر در گروه یافت نشد!</code>'
     end
 	         send(msg.chat_id_, msg.id_, 1, texts, 1, 'html')
     end
@@ -1738,7 +1738,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	if text:match("^[#!/]setowner (%d+)$") and is_admin(msg.sender_user_id_, msg.chat_id_) then
 	local ap = {string.match(text, "^[#/!](setowner) (%d+)$")} 	
 	        database:sadd('bot:owners:'..msg.chat_id_, ap[2])
-	send(msg.chat_id_, msg.id_, 1, '_User_ *'..ap[2]..'* _Promoted as Group Owner._', 1, 'md')
+	send(msg.chat_id_, msg.id_, 1, '_کاربر_ *'..ap[2]..'* _به مقام مدیر کل گروه ارتقاء یافت_', 1, 'md')
     end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]demowner$") and is_admin(msg.sender_user_id_) and msg.reply_to_message_id_ then
@@ -1847,7 +1847,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	if text:match("^[#!/]([mM][oO][dD][lL][iI][sS][tT])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
     local hash =  'bot:mods:'..msg.chat_id_
 	local list = database:smembers(hash)
-	local text = "<b>Mod List:</b>\n\n"
+	local text = "<b>لیست مدیران گروه:</b>\n\n"
 	for k,v in pairs(list) do
 	local user_info = database:hgetall('user:'..v)
 		if user_info and user_info.username then
@@ -1858,7 +1858,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 		end
 	end
 	if #list == 0 then
-       text = "Mod List is empty"
+       text = "هیچ دستیار مدیری در گروه وجود ندارد"
     end
 	send(msg.chat_id_, msg.id_, 1, text, 1, 'html')
     end
@@ -1866,7 +1866,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	if text:match("^[#!/]([mM][uU][tT][eE][lL][iI][Ss][tT])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
     local hash =  'bot:muted:'..msg.chat_id_
 	local list = database:smembers(hash)
-	local text = "<b>Mute List:</b>\n\n"
+	local text = "<b>لیست افراد سکوت شده:</b>\n\n"
 	for k,v in pairs(list) do
 	local user_info = database:hgetall('user:'..v)
 		if user_info and user_info.username then
@@ -1877,7 +1877,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 		end
 	end
 	if #list == 0 then
-       text = "MuteList is empty"
+       text = "هیچ فردی در گروه در حالت سکوت وجود ندارد"
     end
 	send(msg.chat_id_, msg.id_, 1, text, 1, 'html')
     end
@@ -1885,7 +1885,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	if text:match("^[#!/]([Oo][wW][nN][Ee][rR])$") or text:match("^[#!/]([Oo][wW][nN][Ee][rR][lL][iI][sS][tT])$") and is_sudo(msg) then
     local hash =  'bot:owners:'..msg.chat_id_
 	local list = database:smembers(hash)
-	local text = "<b>Owner List:</b>\n\n"
+	local text = "<b>لیست مدیران کل گروه:</b>\n\n"
 	for k,v in pairs(list) do
 	local user_info = database:hgetall('user:'..v)
 		if user_info and user_info.username then
@@ -1896,7 +1896,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 		end
 	end
 	if #list == 0 then
-       text = "Owner List is empty"
+       text = "هیچ مدیر کلی در گروه وجود ندارد"
     end
 	send(msg.chat_id_, msg.id_, 1, text, 1, 'html')
     end
@@ -1904,7 +1904,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	if text:match("^[#!/]([bB][Aa][nN][Ll][Ii][Ss][tT])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
     local hash =  'bot:banned:'..msg.chat_id_
 	local list = database:smembers(hash)
-	local text = "<b>Ban List:</b>\n\n"
+	local text = "<b>لیست افراد بن شده:</b>\n\n"
 	for k,v in pairs(list) do
 	local user_info = database:hgetall('user:'..v)
 		if user_info and user_info.username then
@@ -1915,7 +1915,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 		end
 	end
 	if #list == 0 then
-       text = "Ban List is empty"
+       text = "هیچ فردی در گروه بن نشده است"
     end
 	send(msg.chat_id_, msg.id_, 1, text, 1, 'html')
     end
@@ -1942,7 +1942,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
     if text:match("^[#!/]([iI][dD])$") and msg.reply_to_message_id_ ~= 0 then
       function id_by_reply(extra, result, success)
 	  local user_msgs = database:get('user:msgs'..result.chat_id_..':'..result.sender_user_id_)
-        send(msg.chat_id_, msg.id_, 1, "* User ID:* `"..result.sender_user_id_.."`\n*Number of Msgs:* `"..user_msgs.."`", 1, 'md')
+        send(msg.chat_id_, msg.id_, 1, "_آیدی شما_: `"..result.sender_user_id_.."`\n_تعداد پیام های ارسالی_ : `"..user_msgs.."`", 1, 'md')
         end
    getMessage(msg.chat_id_, msg.reply_to_message_id_,id_by_reply)
   end
@@ -1952,19 +1952,19 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function id_by_username(extra, result, success)
 	if result.id_ then
 	if is_sudo(result) then
-	  t = 'Sudo'
+	  t = 'مدیر کل ربات'
       elseif is_admin(result.id_) then
-	  t = 'Global Admin'
+	  t = 'اددمین ربات'
       elseif is_owner(result.id_, msg.chat_id_) then
-	  t = 'Group Owner'
+	  t = 'مدیر کل گروه'
       elseif is_mod(result.id_, msg.chat_id_) then
-	  t = 'Moderator'
+	  t = 'دستیار مدیر'
       else
-	  t = 'Member'
+	  t = 'فرد عادی'
 	  end
-            texts = '*Username From* : `@'..ap[2]..'`\n*ID From* : `('..result.id_..')`\n*Rank From* : `'..t..'`'
+            texts = '_یوزرنیم کاربر_ : `@'..ap[2]..'`\n_آیدی کاربر_ : `('..result.id_..')`\n_مقام کاربر_ : `'..t..'`'
             else 
-            texts = '<code>User not found!</code>'
+            texts = '<code>کاربر یافت نشد!</code>'
     end
 	         send(msg.chat_id_, msg.id_, 1, texts, 1, 'md')
     end
@@ -1974,9 +1974,9 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
   if text:match("^[#!/]([kK][Ii][cC][kK])$") and msg.reply_to_message_id_ and is_mod(msg.sender_user_id_, msg.chat_id_) then
       function kick_reply(extra, result, success)
 	if is_mod(result.sender_user_id_, result.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*You Can,t [Kick/Ban] Moderators!!*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_شما نمیتوانید مقام بالاتر از خود را ریمو کنید_', 1, 'md')
     else
-        send(msg.chat_id_, msg.id_, 1, 'User '..result.sender_user_id_..' Kicked.', 1, 'html')
+        send(msg.chat_id_, msg.id_, 1, '_کاربر_ '..result.sender_user_id_..' _اخراج گردید_.', 1, 'html')
         chat_kick(result.chat_id_, result.sender_user_id_)
         end
 	end
@@ -1994,9 +1994,9 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 local function getpro(extra, result, success)
 local user_msgs = database:get('user:msgs'..msg.chat_id_..':'..msg.sender_user_id_)
    if result.photos_[0] then
-            send(msg.chat_id_, msg.id_, 1, "*Supergroup ID:* `"..msg.chat_id_.."`\n*Your ID:* `"..msg.sender_user_id_.."`", 1, 'md')
+            send(msg.chat_id_, msg.id_, 1, "_آیدی گروه_: `"..msg.chat_id_.."`\n_آیدی شما_: `"..msg.sender_user_id_.."`", 1, 'md')
    else
-      send(msg.chat_id_, msg.id_, 1, "*Supergroup ID:* `"..msg.chat_id_.."`\n* Your ID:* `"..msg.sender_user_id_.."`", 1, 'md')
+      send(msg.chat_id_, msg.id_, 1, "_آیدی گروه_: `"..msg.chat_id_.."`\n_آیدی شما_: `"..msg.sender_user_id_.."`", 1, 'md')
    end
    end
    tdcli_function ({
@@ -2086,23 +2086,23 @@ local function gpro(extra, result, success)
 	if text:match("^[#!/]([lL][oO][cC][kK]) (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local lockkpt = {string.match(text, "^[#/!]([lL][oO][cC][kK]) (.*)$")} 
       if lockkpt[2] == "edit" then
-         send(msg.chat_id_, msg.id_, 1, '*Edit Has Been Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ادیت کردن پیام فعال شد_', 1, 'md')
          database:set('editmsg'..msg.chat_id_,'delmsg')
 	  end
 	  if lockkpt[2] == "cmds" then
-         send(msg.chat_id_, msg.id_, 1, '*Cmds BOT Has Been Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل دستورات ربات برای اعضای عادی فعال شد_', 1, 'md')
          database:set('bot:cmds'..msg.chat_id_,true)
       end
 	  if lockkpt[2] == "bots" then
-         send(msg.chat_id_, msg.id_, 1, '_ Bots Has been_ *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ورود ربات ها فعال شد_', 1, 'md')
          database:set('bot:bots:mute'..msg.chat_id_,true)
       end
 	  if lockkpt[2] == "flood" then
-         send(msg.chat_id_, msg.id_, 1, '*Flood* has been *locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل پیام مکرر فعال شد_', 1, 'md')
          database:del('anti-flood:'..msg.chat_id_)
 	  end
 	  if lockkpt[2] == "pin" then
-         send(msg.chat_id_, msg.id_, 1, "*Pin Message Has Been Locked*", 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, "_قفل پین کردن پیام در گروه فعال شد_", 1, 'md')
 	     database:set('bot:pin:mute'..msg.chat_id_,true)
       end
 	end
@@ -2110,63 +2110,63 @@ local function gpro(extra, result, success)
 	if text:match("^[#!/]([sS][eE][Tt][fF][lL][oO][oO][dD]) (%d+)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local floodmax = {string.match(text, "^[#/!]([sS][eE][Tt][fF][lL][oO][oO][dD]) (%d+)$")} 
 	if tonumber(floodmax[2]) < 2 then
-         send(msg.chat_id_, msg.id_, 1, '*Wrong number*,_range is  [2-99999]_', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_عدد وارد شده پیش از حد میباشد باید بین_  _[2-99999]_ _باشد_', 1, 'md')
 	else
     database:set('flood:max:'..msg.chat_id_,floodmax[2])
-         send(msg.chat_id_, msg.id_, 1, '_ Flood has been set to_ *'..floodmax[2]..'*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_حساسیت پیام مکرر تغییر یافت به :_ *'..floodmax[2]..'*', 1, 'md')
 	end
 	end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([sS][eE][Tt][fF][lL][oO][oO][dD][tT][iI][mM][eE]) (%d+)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local floodt = {string.match(text, "^[#/!]([sS][eE][Tt][fF][lL][oO][oO][dD][tT][iI][mM][eE]) (%d+)$")} 
 	if tonumber(floodt[2]) < 2 then
-         send(msg.chat_id_, msg.id_, 1, '*Wrong number*,_range is  [2-99999]_', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_عدد وارد شده پیش از حد میباشد باید بین_  _[2-99999]_ _باشد_', 1, 'md')
 	else
     database:set('flood:time:'..msg.chat_id_,floodt[2])
-         send(msg.chat_id_, msg.id_, 1, '_ FloodTime(CheckSpam) has been set to_ *'..floodt[2]..'*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_چک کردن پیام تغییر یافت به :_ *'..floodt[2]..'*', 1, 'md')
 	end
 	end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([sS][hH][oO][wW]) ([eE][dD][Ii][tT])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*Show Edit : Enable*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_فعال شد_\nاز این پس اگر متنی ادیت شود متن قبل ادیت به نمایش در میاید', 1, 'md')
          database:set('editmsg'..msg.chat_id_,'didam')
 	end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([Uu][Nn][sS][hH][oO][wW]) ([eE][dD][Ii][tT])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*Show Edit : Disable*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_غیرفعال شد_\nاز این پس اگر متنی ادیت شود متن قبل ادیت به نمایش در نمیاید', 1, 'md')
          database:del('editmsg'..msg.chat_id_,'didam')
 	end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([sS][eE][tT][lL][iI][nN][kK])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*Please Send Group Link Now!*', 1, 'md')
-         database:set("bot:group:link"..msg.chat_id_, 'Waiting For Link!\nPls Send Group Link.\n\nJoin My Channel > @IranDevTeam')
+         send(msg.chat_id_, msg.id_, 1, '_لینک گروه خود را ارسال کنید_', 1, 'md')
+         database:set("bot:group:link"..msg.chat_id_, 'لینک ثبت نشده است!!\n_لینک جدید گروه خود را ارسال کنید_')
 	end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([lL][iI][nN][kK])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local link = database:get("bot:group:link"..msg.chat_id_)
 	  if link then
-         send(msg.chat_id_, msg.id_, 1, '<b>Group link:</b>\n'..link, 1, 'html')
+         send(msg.chat_id_, msg.id_, 1, '<b>لینک گروه:</b>\n'..link, 1, 'html')
 	  else
-         send(msg.chat_id_, msg.id_, 1, '*There is not link set yet. Please add one by #setlink .*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_لینک تنظیم نشده لطفا دستور /setlink را ارسال کنید_', 1, 'md')
 	  end
  	end
 	
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([wW][eE][lL][cC][oO][mM][eE]) ([oO][nN])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '#Done\nWelcome *Enabled* In This Supergroup.', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_خوش آمد گویی در گروه فعال گردید_', 1, 'md')
 		 database:set("bot:welcome"..msg.chat_id_,true)
 	end
 	if text:match("^[#!/]([wW][eE][lL][cC][oO][mM][eE]) ([oO][Ff][fF])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '#Done\nWelcome *Disabled* In This Supergroup.', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_خوش آمد گویی در گروه غیرفعال گردید_', 1, 'md')
 		 database:del("bot:welcome"..msg.chat_id_)
 	end
 	if text:match("^[#!/]([sS][eE][tT]) ([wW][eE][lL][cC][oO][mM][eE]) (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local welcome = {string.match(text, "^[#/!]([sS][eE][tT]) ([wW][eE][lL][cC][oO][mM][eE]) (.*)$")} 
-         send(msg.chat_id_, msg.id_, 1, '*Welcome Msg Has Been Saved!*\nWlc Text:\n\n`'..welcome[2]..'`', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_خوش آمدیی تنظیم شد!_\nمتن خوش آمد گویی:\n\n`'..welcome[2]..'`', 1, 'md')
 		 database:set('welcome:'..msg.chat_id_,welcome[2])
 	end
 	if text:match("^[#!/]([dD][eE][lL]) ([wW][eE][lL][cC][oO][mM][eE])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
-         send(msg.chat_id_, msg.id_, 1, '*Welcome Msg Has Been Deleted!*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_خوش آمد گویی حذف گردید_', 1, 'md')
 		 database:del('welcome:'..msg.chat_id_)
 	end
 	if text:match("^[#!/](get) ([wW][eE][lL][cC][oO][mM][eE])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
@@ -2198,26 +2198,26 @@ local function gpro(extra, result, success)
 	local filters = {string.match(text, "^[#/!]([fF][Ii][lL][tT][eE][Rr]) + (.*)$")} 
     local name = string.sub(filters[2], 1, 50)
           database:hset('bot:filters:'..msg.chat_id_, name, 'filtered')
-		  send(msg.chat_id_, msg.id_, 1, "*New Word Filtered!*\n> `"..name.."`", 1, 'md')
+		  send(msg.chat_id_, msg.id_, 1, "_کلمه جدید فیلتر شد_\n> `"..name.."`", 1, 'md')
 	end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([fF][Ii][lL][tT][eE][Rr]) - (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local rws = {string.match(text, "^[#/!]([fF][Ii][lL][tT][eE][Rr]) - (.*)$")} 
     local name = string.sub(rws[2], 1, 50)
           database:hdel('bot:filters:'..msg.chat_id_, rws[2])
-		  send(msg.chat_id_, msg.id_, 1, "`"..rws[2].."` *Removed From Filtered List!*", 1, 'md')
+		  send(msg.chat_id_, msg.id_, 1, "_کلمه_ > `"..rws[2].."`\n_از لیست فیلتر کلمات حذف گردید_", 1, 'md')
 	end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([fF][Ii][lL][tT][eE][rR][lL][iI][sS][tT])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local hash = 'bot:filters:'..msg.chat_id_
       if hash then
          local names = database:hkeys(hash)
-         local text = '*Filtered Words :*\n\n'
+         local text = '_لیست کلمات فیلتر شده_ :\n\n'
     for i=1, #names do
       text = text..'> `'..names[i]..'`\n'
     end
 	if #names == 0 then
-       text = "*Filter List is empty*"
+       text = "_هیچ کلمه ای در این گروه فیلتر نشده است_"
     end
 		  send(msg.chat_id_, msg.id_, 1, text, 1, 'md')
        end
@@ -2345,19 +2345,19 @@ local function gpro(extra, result, success)
 	if text:match("^[#!/]([lL][oO][cC][kK]) (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local lockpt = {string.match(text, "^[#/!]([lL][oO][cC][kK]) (.*)$")} 
 	  if lockpt[2] == "inline" then
-         send(msg.chat_id_, msg.id_, 1, '_ Inline Has been_ *Muted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل اینلاین پیام فعال گردید_', 1, 'md')
          database:set('bot:inline:mute'..msg.chat_id_,true)
       end
 	  if lockpt[2] == "links" then
-         send(msg.chat_id_, msg.id_, 1, ' *Link* posting has been *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل لینک فعال شد_', 1, 'md')
          database:set('bot:links:mute'..msg.chat_id_,true)
       end
 	  if lockpt[2] == "username" then
-         send(msg.chat_id_, msg.id_, 1, ' *Username(@)* posting has been *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال یوزرنیم(@) فعال شد_', 1, 'md')
          database:set('bot:tag:mute'..msg.chat_id_,true)
       end
 	  if lockpt[2] == "hashtag" then
-         send(msg.chat_id_, msg.id_, 1, ' *Hashtag(#)* posting has been *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال هشتگ(#) فعال شد_', 1, 'md')
          database:set('bot:hashtag:mute'..msg.chat_id_,true)
       end
 	  if lockpt[2] == "contact" then
@@ -2455,7 +2455,7 @@ local function gpro(extra, result, success)
 	local txt = {string.match(text, "^[#/!]([cC][lL][eE][aA][nN]) (.*)$")} 
        if txt[2] == 'banlist' then
 	      database:del('bot:banned:'..msg.chat_id_)
-          send(msg.chat_id_, msg.id_, 1, '_ Banlist has been_ *Cleaned*', 1, 'md')
+          send(msg.chat_id_, msg.id_, 1, '_تمامی افراد بن شده به حالت آنبن در آمدند_', 1, 'md')
        end
 	   if txt[2] == 'bots' then
 	  local function g_bots(extra,result,success)
@@ -2465,19 +2465,19 @@ local function gpro(extra, result, success)
           end
       end
     channel_get_bots(msg.chat_id_,g_bots)
-	          send(msg.chat_id_, msg.id_, 1, '_ All bots_ *kicked!*', 1, 'md')
+	          send(msg.chat_id_, msg.id_, 1, '_تمامی ربات های موجود در این گروه بن گردید_', 1, 'md')
 	end
 	   if txt[2] == 'modlist' then
 	      database:del('bot:mods:'..msg.chat_id_)
-          send(msg.chat_id_, msg.id_, 1, '_ Modlist has been_ *Cleaned*', 1, 'md')
+          send(msg.chat_id_, msg.id_, 1, '_تمامی دستیار مدیران حذف گردید و کاربر عادی شدند_', 1, 'md')
        end
 	   if txt[2] == 'filterlist' then
 	      database:del('bot:filters:'..msg.chat_id_)
-          send(msg.chat_id_, msg.id_, 1, '_ Filterlist has been_ *Cleaned*', 1, 'md')
+          send(msg.chat_id_, msg.id_, 1, '_فیلتر تمامی کلمات حذف گردید_', 1, 'md')
        end
 	   if txt[2] == 'mutelist' then
 	      database:del('bot:muted:'..msg.chat_id_)
-          send(msg.chat_id_, msg.id_, 1, '_ Mutelist has been_ *Cleaned*', 1, 'md')
+             send(msg.chat_id_, msg.id_, 1, '_لیست افراد سکوت شده پاکسازی شدند_', 1, 'md')
        end
     end
 	-----------------------------------------------------------------------------------------------
@@ -2702,7 +2702,7 @@ local function gpro(extra, result, success)
   	if text:match("^[#!/]([sS][eE][tT][rR][Uu][lL][eE][sS]) (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local txt = {string.match(text, "^[#/!]([sS][eE][tT][rR][Uu][lL][eE][sS]) (.*)$")}
 	database:set('bot:rules'..msg.chat_id_, txt[2])
-         send(msg.chat_id_, msg.id_, 1, '_Group rules upadted..._', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قوانین گروه ثبت شد_', 1, 'md')
     end
 	-----------------------------------------------------------------------------------------------
   	if text:match("^[#!/]([rR][Uu][lL][eE][sS])$") then
@@ -2804,7 +2804,7 @@ local function gpro(extra, result, success)
   if text:match('^[#!/]([aA][dD][dD])') and is_admin(msg.sender_user_id_, msg.chat_id_) then
        local txt = {string.match(text, "^[#/!]([aA][dD][dD])$")} 
        database:set("bot:charge:"..msg.chat_id_,true)
-	   send(msg.chat_id_, msg.id_, 1, '*Group Added By Username* : _["..msg.sender_user_id_.."]_', 1, 'md')
+	   send(msg.chat_id_, msg.id_, 1, '_این گروه توسط_ : _["..msg.sender_user_id_.."]_ _به دیتابیس اضافه گردید_', 1, 'md')
 	   for k,v in pairs(sudo_users) do
 	      send(v, 0, 1, "*User  "..msg.sender_user_id_.." Added bot to new group*" , 1, 'md')
        end
@@ -2814,13 +2814,13 @@ local function gpro(extra, result, success)
   if text:match('^[#!/]([rR][eE][mN])') and is_admin(msg.sender_user_id_, msg.chat_id_) then
        local txt = {string.match(text, "^[#/!]([rR][eE][mN])$")} 
        database:del("bot:charge:"..msg.chat_id_)
-	   send(msg.chat_id_, msg.id_, 1, 'Group Removed By Username* : _["..msg.sender_user_id_.."]_', 1, 'md')
+	   send(msg.chat_id_, msg.id_, 1, '_این گروه توسط_ : _["..msg.sender_user_id_.."]_ _از دیتابیس حذف گردید_', 1, 'md')
 	   for k,v in pairs(sudo_users) do
 	      send(v, 0, 1, "*User  "..msg.sender_user_id_.." Removed bot from new group*" , 1, 'md')
        end
   end
   -----------------------------------------------------------------------------------------------
-   if text:match('join(-%d+)') and is_admin(msg.sender_user_id_, msg.chat_id_) then
+   if text:match('[#/!]join(-%d+)') and is_admin(msg.sender_user_id_, msg.chat_id_) then
        local txt = {string.match(text, "^[#/!](join)(-%d+)$")} 
 	   send(msg.chat_id_, msg.id_, 1, 'با موفقیت تورو به گروه '..txt[3]..' اضافه کردم.', 1, 'md')
 	   send(txt[2], 0, 1, '"Admin Joined!🌚', 1, 'md')
@@ -2838,23 +2838,23 @@ else
         for i= id - delnumb[2] , id do 
         delete_msg(msg.chat_id_,{[0] = i})
         end
-			send(msg.chat_id_, msg.id_, 1, 'Message '..delnumb[2]..' Has Been Removed.', 1, 'md')
+			send(msg.chat_id_, msg.id_, 1, 'تعداد > '..delnumb[2]..' _پیام حذف گردید_.', 1, 'md')
     end
 	end
 	-----------------------------------------------------------------------------------------------
    if text:match("^[#!/]([mM][eE])$") then
       if is_sudo(msg) then
-	  t = '*Sudo*'
+	  t = '_مدیر کل ربات_'
       elseif is_admin(msg.sender_user_id_) then
-	  t = '*Global Admin*'
+	  t = '_اددمین ربات_'
       elseif is_owner(msg.sender_user_id_, msg.chat_id_) then
-	  t = '*Group Owner*'
+	  t = '_مدیر کل گروه_'
       elseif is_mod(msg.sender_user_id_, msg.chat_id_) then
-	  t = '*Moderator*'
+	  t = '_دستیار مدیر_'
       else
-	  t = '*Member*'
+	  t = '_اعضای عادی_'
 	  end
-         send(msg.chat_id_, msg.id_, 1, '_Your Username :_ @'..msg.sender_user_username_..'\n_Your Rank is:_ '..t, 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_یوزرنیم شما :_ @'..msg.sender_user_username_..'\n_مقام شما:_ '..t, 1, 'md')
     end
    -----------------------------------------------------------------------------------------------
    if text:match("^[#!/]([pp][ii][nn])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
@@ -2862,11 +2862,12 @@ else
         local msgs = {[0] = id}
        pin(msg.chat_id_,msg.reply_to_message_id_,0)
 	   database:set('pinnedmsg'..msg.chat_id_,msg.reply_to_message_id_)
+	      send(msg.chat_id_, msg.id_, 1, '_پیام مورد نظر سنجاق گردید_', 1, 'md')
    end
    -----------------------------------------------------------------------------------------------
    if text:match("^[#!/]([uu][nn][pp][ii][nn])$") and is_owner(msg.sender_user_id_, msg.chat_id_) then
          unpinmsg(msg.chat_id_)
-         send(msg.chat_id_, msg.id_, 1, 'Pinned Msg han been unpinned!', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_پیام از  حالت سنجاق حذف گردید_', 1, 'md')
    end
    -----------------------------------------------------------------------------------------------
    if text:match("^[#!/]repin$") and is_owner(msg.sender_user_id_, msg.chat_id_) then
@@ -2881,7 +2882,7 @@ local pin_id = database:get('pinnedmsg'..msg.chat_id_)
    -----------------------------------------------------------------------------------------------
    if text:match("^[#!/]viewpost$") then
         database:set('bot:viewget'..msg.sender_user_id_,true)
-        send(msg.chat_id_, msg.id_, 1, '*Please send a post now!*', 1, 'md')
+        send(msg.chat_id_, msg.id_, 1, '_پست مورد نظر را فروراد کنید_', 1, 'md')
    end
   end
   -----------------------------------------------------------------------------------------------
