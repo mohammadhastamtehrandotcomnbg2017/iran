@@ -609,58 +609,58 @@ function tdcli_update_callback(data)
 	-------------------------
     elseif msg.content_.ID == "MessageText" then
 	text = msg.content_.text_
-		print("TEXT MSG DETECTED!!")
+		print("پیام(متن) بارگذاری شد!!")
 	msg_type = 'MSG:Text'
 	-------------------------
 	elseif msg.content_.ID == "MessagePhoto" then
-	print("PHOTO DETECTED!!")
+	print("عکس بارگذاری شد!!")
 	if msg.content_.caption_ then
 	caption_text = msg.content_.caption_
 	end
 	msg_type = 'MSG:Photo'
 	-------------------------
 	elseif msg.content_.ID == "MessageChatAddMembers" then
-	print("NEW ADD DETECTED!!")
+	print("کاربر جدید ادد شده بارگذاری شد!")
 	msg_type = 'MSG:NewUserAdd'
 	-------------------------
 	elseif msg.content_.ID == "MessageChatJoinByLink" then
-		print("NEW JOIN DETECTED!!")
+		print("کاربر جدید توسط لینک بارگذاری شد!!")
 	msg_type = 'MSG:NewUserLink'
 	-------------------------
 	elseif msg.content_.ID == "MessageSticker" then
-		print("STICKER DETECTED!!")
+		print("استیکر بارگذاری شد!!")
 	msg_type = 'MSG:Sticker'
 	-------------------------
 	elseif msg.content_.ID == "MessageAudio" then
-		print("MUSIC DETECTED!!")
+		print("موزیک بارگذاری شد!!")
 	if msg.content_.caption_ then
 	caption_text = msg.content_.caption_
 	end
 	msg_type = 'MSG:Audio'
 	-------------------------
 	elseif msg.content_.ID == "MessageVoice" then
-		print("VOICE DETECTED!!")
+		print("ویس بارگذاری شد!!")
 	if msg.content_.caption_ then
 	caption_text = msg.content_.caption_
 	end
 	msg_type = 'MSG:Voice'
 	-------------------------
 	elseif msg.content_.ID == "MessageVideo" then
-		print("VIDEO DETECTED!!")
+		print("ویدِیو بارگذاری شد!!")
 	if msg.content_.caption_ then
 	caption_text = msg.content_.caption_
 	end
 	msg_type = 'MSG:Video'
 	-------------------------
 	elseif msg.content_.ID == "MessageAnimation" then
-		print("GIF DETECTED!!")
+		print("گیف بارگذاری شد!!")
 	if msg.content_.caption_ then
 	caption_text = msg.content_.caption_
 	end
 	msg_type = 'MSG:Gif'
 	-------------------------
 	elseif msg.content_.ID == "MessageLocation" then
-		print("LOCATION DETECTED!!")
+		print("مکان ارسال شده بارگذاری شد!!")
 	if msg.content_.caption_ then
 	caption_text = msg.content_.caption_
 	end
@@ -670,7 +670,7 @@ function tdcli_update_callback(data)
 	msg_type = 'MSG:NewUser'
 	-------------------------
 	elseif msg.content_.ID == "MessageContact" then
-		print("CONTACT DETECTED!!")
+		print("شماره تلفن ارسال شده بارگذاری شد!!")
 	if msg.content_.caption_ then
 	caption_text = msg.content_.caption_
 	end
