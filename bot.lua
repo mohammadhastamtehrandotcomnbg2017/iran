@@ -2823,7 +2823,7 @@ local function gpro(extra, result, success)
    if text:match('[#/!]join(-%d+)') and is_admin(msg.sender_user_id_, msg.chat_id_) then
        local txt = {string.match(text, "^[#/!](join)(-%d+)$")} 
 	   send(msg.chat_id_, msg.id_, 1, 'با موفقیت تورو به گروه '..txt[2]..' اضافه کردم.', 1, 'md')
-	   send(txt[2], 0, 1, 'Admin Joined!🌚', 1, 'md')
+	   send(txt[2], 0, 1, 'مدیر ربات وارد گروه میشود لطفا احترام خود را با مدیر ربات حفظ کنید با تشکر!🌚', 1, 'md')
 	   add_user(txt[2], msg.sender_user_id_, 10)
   end
    -----------------------------------------------------------------------------------------------
