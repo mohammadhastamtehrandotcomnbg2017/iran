@@ -575,7 +575,7 @@ function tdcli_update_callback(data)
 						user_id = msg.sender_user_id_
 						local bhash =  'bot:banned:'..msg.chat_id_
                         database:sadd(bhash, user_id)
-                           send(msg.chat_id_, msg.id_, 1, 'Spamming Not Allowed Here\nUsername Spammber : *['..msg.sender_user_id_..']*\n`Spammer Banned From Group`', 1, 'md')
+                           send(msg.chat_id_, msg.id_, 1, '_اسپم مجاز نیست!_\n_کاربر_: *['..msg.sender_user_id_..']*\n`به دلیل اسپم بن گردید`', 1, 'md')
 					  end
                     end
                     database:setex(hash, floodTime, msgs+1)
@@ -743,10 +743,10 @@ if msg.content_.ID == "MessagePinMessage" then
 end
 if database:get('bot:viewget'..msg.sender_user_id_) then 
     if not msg.forward_info_ then
-		send(msg.chat_id_, msg.id_, 1, '*Error*\n`Please send this command again and forward your post(from channel)`', 1, 'md')
+		send(msg.chat_id_, msg.id_, 1, '_ارور 404_\n_پست را حتما باید فروراد کنید از کانال_', 1, 'md')
 		database:del('bot:viewget'..msg.sender_user_id_)
 	else
-		send(msg.chat_id_, msg.id_, 1, '_تعداد بازدید پست شما_: '..msg.views_..' View!', 1, 'md')
+		send(msg.chat_id_, msg.id_, 1, '_تعداد بازدید پست شما_: '..msg.views_..' بازدید!', 1, 'md')
         database:del('bot:viewget'..msg.sender_user_id_)
 	end
 end
@@ -1614,7 +1614,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function unban_by_username(extra, result, success)
 	if result.id_ then
          database:srem('bot:banned:'..msg.chat_id_, result.id_)
-            text = '_کاربر_ <code>@'..result.id_..'</code> _با موفقیت آنبن شد_'
+            text = '_کاربر_ <code>'..result.id_..'</code> _با موفقیت آنبن شد_'
             else 
             text = '<code>این کاربر در گروه یافت نشد!</code>'
     end
@@ -1654,7 +1654,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
          send(msg.chat_id_, msg.id_, 1, '_شما نمیتوانید مقام بالاتر از خود را موت کنید_', 1, 'md')
     else
 	        database:sadd('bot:muted:'..msg.chat_id_, result.id_)
-            texts = '_کاربر_ <code>@'..result.id_..'</code> _به لیست افراد سکوت اضافه شد._'
+            texts = '_کاربر_ <code>'..result.id_..'</code> _به لیست افراد سکوت اضافه شد._'
 		 chat_kick(msg.chat_id_, result.id_)
 	end
             else 
@@ -1693,7 +1693,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function unmute_by_username(extra, result, success)
 	if result.id_ then
          database:srem('bot:muted:'..msg.chat_id_, result.id_)
-            text = '_کاربر_ <code>@'..result.id_..'</code> _از لیست افراد سکوت حذف گردید._'
+            text = '_کاربر_ <code>'..result.id_..'</code> _از لیست افراد سکوت حذف گردید._'
             else 
             text = '<code>کاربرمورد نظر در گروه یافت نشد!</code>'
     end
@@ -1726,7 +1726,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 	function setowner_by_username(extra, result, success)
 	if result.id_ then
 	        database:sadd('bot:owners:'..msg.chat_id_, result.id_)
-            texts = '_کاربر_ <code>@'..result.id_..'</code> _به مقام مدیر کل گروه ارتقاء یافت_'
+            texts = '_کاربر_ <code>'..result.id_..'</code> _به مقام مدیر کل گروه ارتقاء یافت_'
             else 
             texts = '<code>کاربرمورد نظر در گروه یافت نشد!</code>'
     end
@@ -1994,9 +1994,9 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 local function getpro(extra, result, success)
 local user_msgs = database:get('user:msgs'..msg.chat_id_..':'..msg.sender_user_id_)
    if result.photos_[0] then
-            send(msg.chat_id_, msg.id_, 1, "_آیدی گروه_: `"..msg.chat_id_.."`\n_آیدی شما_: `"..msg.sender_user_id_.."`", 1, 'md')
+            send(msg.chat_id_, msg.id_, 1, "_آیدی گروه_: `"..msg.chat_id_.."`\n_آیدی شما_: `"..msg.sender_user_id_.."`\n_تعداد پیام های ارسالی_ : `"..user_msgs.."`", 1, 'md')
    else
-      send(msg.chat_id_, msg.id_, 1, "_آیدی گروه_: `"..msg.chat_id_.."`\n_آیدی شما_: `"..msg.sender_user_id_.."`", 1, 'md')
+      send(msg.chat_id_, msg.id_, 1, "_آیدی گروه_: `"..msg.chat_id_.."`\n_آیدی شما_: `"..msg.sender_user_id_.."`\n_تعداد پیام های ارسالی_ : `"..user_msgs.."`", 1, 'md')
    end
    end
    tdcli_function ({
@@ -2194,14 +2194,14 @@ local function gpro(extra, result, success)
 	  end
 	end
 	-----------------------------------------------------------------------------------------------
-	if text:match("^[#!/]([fF][Ii][lL][tT][eE][Rr]) + (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
+	if text:match("^[#!/]([fF][Ii][lL][tT][eE][Rr]) (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local filters = {string.match(text, "^[#/!]([fF][Ii][lL][tT][eE][Rr]) + (.*)$")} 
     local name = string.sub(filters[2], 1, 50)
           database:hset('bot:filters:'..msg.chat_id_, name, 'filtered')
 		  send(msg.chat_id_, msg.id_, 1, "_کلمه جدید فیلتر شد_\n> `"..name.."`", 1, 'md')
 	end
 	-----------------------------------------------------------------------------------------------
-	if text:match("^[#!/]([fF][Ii][lL][tT][eE][Rr]) - (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
+	if text:match("^[#!/]([Uu][Nn][fF][Ii][lL][tT][eE][Rr]) - (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local rws = {string.match(text, "^[#/!]([fF][Ii][lL][tT][eE][Rr]) - (.*)$")} 
     local name = string.sub(rws[2], 1, 50)
           database:hdel('bot:filters:'..msg.chat_id_, rws[2])
@@ -2243,23 +2243,23 @@ local function gpro(extra, result, success)
   	if text:match("^[#!/]([uU][nN][lL][oO][cC][kK]) (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local unlockkpt = {string.match(text, "^[#/!]([uU][nN][lL][oO][cC][kK]) (.*)$")} 
       if unlockkpt[2] == "edit" then
-         send(msg.chat_id_, msg.id_, 1, '*Edit Message Has Been UnLocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ادیت غیرفعال شد_', 1, 'md')
          database:del('editmsg'..msg.chat_id_)
       end
 	  if unlockkpt[2] == "cmds" then
-         send(msg.chat_id_, msg.id_, 1, '*Cmds BOT Has Been UnLocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل دستورات ربات غیرفال گردید و اعضای عادی میتوانند استفاده کنند_', 1, 'md')
          database:del('bot:cmds'..msg.chat_id_)
       end
 	  if unlockkpt[2] == "bots" then
-         send(msg.chat_id_, msg.id_, 1, '_Bots Has been_ *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ورود ربات ها غیرفعال شد_', 1, 'md')
          database:del('bot:bots:mute'..msg.chat_id_)
       end
 	  if unlockkpt[2] == "flood" then
-         send(msg.chat_id_, msg.id_, 1, '*Flood* has been *unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل پیام مکرر غیرفعال شد_', 1, 'md')
          database:set('anti-flood:'..msg.chat_id_,true)
 	  end
 	  if unlockkpt[2] == "pin" then
-         send(msg.chat_id_, msg.id_, 1, "*Pin Message Has Been UnLocked*", 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, "_قفل پین کردن پیام غیرفال شد_", 1, 'md')
 	     database:del('bot:pin:mute'..msg.chat_id_)
       end
     end
@@ -2267,41 +2267,41 @@ local function gpro(extra, result, success)
   	if text:match("^[#!/]mute all (%d+)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local mutept = {string.match(text, "^[#!/]mute all (%d+)$")}
 	    		database:setex('bot:muteall'..msg.chat_id_, tonumber(mutept[1]), true)
-         send(msg.chat_id_, msg.id_, 1, '_ Group muted for_ *'..mutept[1]..'* _seconds!_', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کل گروه در حالت سکوت به مدت_ *'..mutept[1]..'* _ثانیه انجام شد!_', 1, 'md')
 	end
 	-----------------------------------------------------------------------------------------------
   	if text:match("^[#!/]([mM][uU][tT][eE]) (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local mutept = {string.match(text, "^[#/!]([mM][uU][tT][eE]) (.*)$")} 
       if mutept[2] == "all" then
-         send(msg.chat_id_, msg.id_, 1, '_Mute All has been_ *enabled*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_کل گروه در حالت سکوت قرار گرفت_', 1, 'md')
          database:set('bot:muteall'..msg.chat_id_,true)
       end
 	  if mutept[2] == "text" then
-         send(msg.chat_id_, msg.id_, 1, '_ Text Has been_ *Muted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت متن فعال شد_', 1, 'md')
          database:set('bot:text:mute'..msg.chat_id_,true)
       end
 	  if mutept[2] == "photo" then
-         send(msg.chat_id_, msg.id_, 1, '_ Photo Has been_ *Muted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت عکس فعال شد_', 1, 'md')
          database:set('bot:photo:mute'..msg.chat_id_,true)
       end
 	  if mutept[2] == "video" then
-         send(msg.chat_id_, msg.id_, 1, '_ Video Has been_ *Muted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت ویدِیو فعال شد_', 1, 'md')
          database:set('bot:video:mute'..msg.chat_id_,true)
       end
 	  if mutept[2] == "gifs" then
-         send(msg.chat_id_, msg.id_, 1, '_ Gifs Has been_ *Muted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت گیف فعال شد_', 1, 'md')
          database:set('bot:gifs:mute'..msg.chat_id_,true)
       end
 	  if mutept[2] == "music" then
-         send(msg.chat_id_, msg.id_, 1, '_ Music Has been_ *Muted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت موزیک فعال شد_', 1, 'md')
          database:set('bot:music:mute'..msg.chat_id_,true)
       end
 	  if mutept[2] == "voice" then
-         send(msg.chat_id_, msg.id_, 1, '_ Voice Has been_ *Muted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت ویس فعال شد_', 1, 'md')
          database:set('bot:voice:mute'..msg.chat_id_,true)
       end
 	  if mutept[2] == "location" then
-         send(msg.chat_id_, msg.id_, 1, ' *Location* has been *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, ' _سکوت ارسال مکان فعال شد_', 1, 'md')
          database:set('bot:location:mute'..msg.chat_id_,true)
       end
 	end
@@ -2309,35 +2309,35 @@ local function gpro(extra, result, success)
   	if text:match("^[#!/]([uU][Nn][Mm][Uu][Tt][Ee]) (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local unmutept = {string.match(text, "^[#/!]([uU][Nn][Mm][Uu][Tt][Ee]) (.*)$")} 
       if unmutept[2] == "all" then
-         send(msg.chat_id_, msg.id_, 1, '_Mute All has been_ *Disabled*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_گروه از حالت سکوت خارج گردید_', 1, 'md')
          database:del('bot:muteall'..msg.chat_id_)
       end
 	  if unmutept[2] == "text" then
-         send(msg.chat_id_, msg.id_, 1, '_ Text Has been_ *Unmuted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت متن غیرفعال شد_', 1, 'md')
          database:del('bot:text:mute'..msg.chat_id_)
       end
 	  if unmutept[2] == "photo" then
-         send(msg.chat_id_, msg.id_, 1, '_>Photo Has been_ *Unmuted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت عکس غیرفعال شد_', 1, 'md')
          database:del('bot:photo:mute'..msg.chat_id_)
       end
 	  if unmutept[2] == "video" then
-         send(msg.chat_id_, msg.id_, 1, '_ Video Has been_ *Unmuted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت ویدِیو غیرفعال شد_', 1, 'md')
          database:del('bot:video:mute'..msg.chat_id_)
       end
 	  if unmutept[2] == "gifs" then
-         send(msg.chat_id_, msg.id_, 1, '_ Gifs Has been_ *Unmuted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت گیف غیرغعال شد_', 1, 'md')
          database:del('bot:gifs:mute'..msg.chat_id_)
       end
 	  if unmutept[2] == "music" then
-         send(msg.chat_id_, msg.id_, 1, '_ Music Has been_ *Unmuted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت موزیک غیرفعال شد_ ', 1, 'md')
          database:del('bot:music:mute'..msg.chat_id_)
       end
 	  if unmutept[2] == "voice" then
-         send(msg.chat_id_, msg.id_, 1, '_ Voice Has been_ *Unmuted*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت ویس غیرفعال شد_', 1, 'md')
          database:del('bot:voice:mute'..msg.chat_id_)
       end
 	  if unmutept[2] == "location" then
-         send(msg.chat_id_, msg.id_, 1, ' *location* posting has been *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_سکوت ارسال مکان غیرفعال شد_', 1, 'md')
          database:del('bot:location:mute'..msg.chat_id_)
       end 
 	end
@@ -2361,35 +2361,35 @@ local function gpro(extra, result, success)
          database:set('bot:hashtag:mute'..msg.chat_id_,true)
       end
 	  if lockpt[2] == "contact" then
-         send(msg.chat_id_, msg.id_, 1, ' *Contact* posting has been *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال شماره تلفن فعال شد_', 1, 'md')
          database:set('bot:contact:mute'..msg.chat_id_,true)
       end
 	  if lockpt[2] == "linkpro" then
-         send(msg.chat_id_, msg.id_, 1, ' *LinkPro* posting has been *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال لینک پیشرفته فعال شد_', 1, 'md')
          database:set('bot:webpage:mute'..msg.chat_id_,true)
       end
 	  if lockpt[2] == "operator" then
-         send(msg.chat_id_, msg.id_, 1, ' *Operator* posting has been *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل اپراتور فعال شد_', 1, 'md')
          database:set('bot:operator:mute'..msg.chat_id_,true)
       end
 	  if lockpt[2] == "arabic" then
-         send(msg.chat_id_, msg.id_, 1, ' *Arabic/Persian* has been *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل زبان عربی و فارسی فعال شد_', 1, 'md')
          database:set('bot:arabic:mute'..msg.chat_id_,true)
       end
 	  if lockpt[2] == "english" then
-         send(msg.chat_id_, msg.id_, 1, ' *English* has been *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل زبان انگلیسی فعال شد_', 1, 'md')
          database:set('bot:english:mute'..msg.chat_id_,true)
       end 
 	  if lockpt[2] == "sticker" then
-         send(msg.chat_id_, msg.id_, 1, ' *Sticker* posting has been *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال استیکر فعال شد_', 1, 'md')
          database:set('bot:sticker:mute'..msg.chat_id_,true)
       end 
 	  if lockpt[2] == "service" then
-         send(msg.chat_id_, msg.id_, 1, ' *TGService* has been *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل پیام ورود و خروج فعال شد_', 1, 'md')
          database:set('bot:tgservice:mute'..msg.chat_id_,true)
       end
 	  if lockpt[2] == "forward" then
-         send(msg.chat_id_, msg.id_, 1, ' *Forward* has been *Locked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال پیام فروراد فعال شد_', 1, 'md')
          database:set('bot:forward:mute'..msg.chat_id_,true)
       end
 	end
@@ -2397,47 +2397,47 @@ local function gpro(extra, result, success)
 	if text:match("^[#!/]([uU][nN][lL][oO][cC][kK]) (.*)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
 	local unlockpt = {string.match(text, "^[#/!]([uU][nN][lL][oO][cC][kK]) (.*)$")} 
 	  if unlockpt[2] == "links" then
-         send(msg.chat_id_, msg.id_, 1, ' *Link* posting has been *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال لینک غیرفعال شد_', 1, 'md')
          database:del('bot:links:mute'..msg.chat_id_)
       end
 	  if unlockpt[2] == "username" then
-         send(msg.chat_id_, msg.id_, 1, ' *Username(@)* posting has been *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال یوزرنیم(@) غیرفعال شد_', 1, 'md')
          database:del('bot:tag:mute'..msg.chat_id_)
       end
 	  if unlockpt[2] == "hashtag" then
-         send(msg.chat_id_, msg.id_, 1, ' *Hashtag(#)* posting has been *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال هشتگ(#) غیرفعال شد_', 1, 'md')
          database:del('bot:hashtag:mute'..msg.chat_id_)
       end
 	  if unlockpt[2] == "contact" then
-         send(msg.chat_id_, msg.id_, 1, ' *Contact* posting has been *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال شماره تلفن غیرفعال شد_', 1, 'md')
          database:del('bot:contact:mute'..msg.chat_id_)
       end
 	  if unlockpt[2] == "linkpro" then
-         send(msg.chat_id_, msg.id_, 1, ' *LinkPro* posting has been *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال لینک پیشرفته غیرفعال شد_', 1, 'md')
          database:del('bot:webpage:mute'..msg.chat_id_)
       end
 	   if unlockpt[2] == "operator" then
-         send(msg.chat_id_, msg.id_, 1, ' *Operator* posting has been *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل اپراتور غیرفعال شد_', 1, 'md')
          database:del('bot:operator:mute'..msg.chat_id_)
       end
 	  if unlockpt[2] == "arabic" then
-         send(msg.chat_id_, msg.id_, 1, ' *Arabic/Persian* has been *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل زبان فارسی و عربی غیرفعال شد_', 1, 'md')
          database:del('bot:arabic:mute'..msg.chat_id_)
       end
 	  if unlockpt[2] == "english" then
-         send(msg.chat_id_, msg.id_, 1, ' *English* has been *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل زبان انگلیسی غیرفعال شد_', 1, 'md')
          database:del('bot:english:mute'..msg.chat_id_)
       end
 	  if unlockpt[2] == "service" then
-         send(msg.chat_id_, msg.id_, 1, ' *TGService* has been *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ورود و خروج غیرفعال شد_', 1, 'md')
          database:del('bot:tgservice:mute'..msg.chat_id_)
       end
 	  if unlockpt[2] == "sticker" then
-         send(msg.chat_id_, msg.id_, 1, ' *Sticker* posting has been *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال استیکر غیرفعال شد_', 1, 'md')
          database:del('bot:sticker:mute'..msg.chat_id_)
       end
 	  if unlockpt[2] == "forward" then
-         send(msg.chat_id_, msg.id_, 1, ' *Forward* has been *Unlocked*', 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_قفل ارسال پیام فروراد غیرفعال شد_', 1, 'md')
          database:del('bot:forward:mute'..msg.chat_id_)
       end 
 	end
@@ -2822,8 +2822,8 @@ local function gpro(extra, result, success)
   -----------------------------------------------------------------------------------------------
    if text:match('[#/!]join(-%d+)') and is_admin(msg.sender_user_id_, msg.chat_id_) then
        local txt = {string.match(text, "^[#/!](join)(-%d+)$")} 
-	   send(msg.chat_id_, msg.id_, 1, 'با موفقیت تورو به گروه '..txt[3]..' اضافه کردم.', 1, 'md')
-	   send(txt[2], 0, 1, '"Admin Joined!🌚', 1, 'md')
+	   send(msg.chat_id_, msg.id_, 1, 'با موفقیت تورو به گروه '..txt[2]..' اضافه کردم.', 1, 'md')
+	   send(txt[2], 0, 1, 'Admin Joined!🌚', 1, 'md')
 	   add_user(txt[2], msg.sender_user_id_, 10)
   end
    -----------------------------------------------------------------------------------------------
@@ -2844,17 +2844,17 @@ else
 	-----------------------------------------------------------------------------------------------
    if text:match("^[#!/]([mM][eE])$") then
       if is_sudo(msg) then
-	  t = '_مدیر کل ربات_'
+	  t = 'مدیر کل ربات'
       elseif is_admin(msg.sender_user_id_) then
-	  t = '_اددمین ربات_'
+	  t = 'اددمین ربات'
       elseif is_owner(msg.sender_user_id_, msg.chat_id_) then
-	  t = '_مدیر کل گروه_'
+	  t = 'مدیر کل گروه'
       elseif is_mod(msg.sender_user_id_, msg.chat_id_) then
-	  t = '_دستیار مدیر_'
+	  t = 'دستیار مدیر'
       else
-	  t = '_اعضای عادی_'
+	  t = 'اعضای عادی'
 	  end
-         send(msg.chat_id_, msg.id_, 1, '_یوزرنیم شما :_ @'..msg.sender_user_username_..'\n_مقام شما:_ '..t, 1, 'md')
+         send(msg.chat_id_, msg.id_, 1, '_یوزرنیم شما_ : @'..msg.sender_user_username_..'\n_مقام شما_: '..t, 1, 'md')
     end
    -----------------------------------------------------------------------------------------------
    if text:match("^[#!/]([pp][ii][nn])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
