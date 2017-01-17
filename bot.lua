@@ -788,6 +788,14 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
         delete_msg(chat,msgs)
 	end
    end
+     if msg.content_.entities_[0].ID == "MessageEntityBold" or msg.content_.entities_[0].ID == "MessageEntityCode" or msg.content_.entities_[0].ID == "MessageEntityPre" or msg.content_.entities_[0].ID == "MessageEntityItalic" then
+   if database:get('bot:markdown:mute'..msg.chat_id_) then
+    local id = msg.id_
+        local msgs = {[0] = id}
+        local chat = msg.chat_id_
+        delete_msg(chat,msgs)
+	end
+   end
    if caption_text:match("#") then
    if database:get('bot:hashtag:mute'..msg.chat_id_) then
     local id = msg.id_
@@ -959,6 +967,14 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
         delete_msg(chat,msgs)
 	end
    end
+   if msg.content_.entities_[0].ID == "MessageEntityBold" or msg.content_.entities_[0].ID == "MessageEntityCode" or msg.content_.entities_[0].ID == "MessageEntityPre" or msg.content_.entities_[0].ID == "MessageEntityItalic" then
+   if database:get('bot:markdown:mute'..msg.chat_id_) then
+    local id = msg.id_
+        local msgs = {[0] = id}
+        local chat = msg.chat_id_
+        delete_msg(chat,msgs)
+	end
+   end
   	if caption_text:match("#") then
    if database:get('bot:hashtag:mute'..msg.chat_id_) then
     local id = msg.id_
@@ -1032,6 +1048,14 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
    end
   if caption_text:match("@") then
   if database:get('bot:tag:mute'..msg.chat_id_) then
+    local id = msg.id_
+        local msgs = {[0] = id}
+        local chat = msg.chat_id_
+        delete_msg(chat,msgs)
+	end
+   end
+   if msg.content_.entities_[0].ID == "MessageEntityBold" or msg.content_.entities_[0].ID == "MessageEntityCode" or msg.content_.entities_[0].ID == "MessageEntityPre" or msg.content_.entities_[0].ID == "MessageEntityItalic" then
+   if database:get('bot:markdown:mute'..msg.chat_id_) then
     local id = msg.id_
         local msgs = {[0] = id}
         local chat = msg.chat_id_
@@ -1117,6 +1141,14 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
         delete_msg(chat,msgs)
 	end
    end
+   if msg.content_.entities_[0].ID == "MessageEntityBold" or msg.content_.entities_[0].ID == "MessageEntityCode" or msg.content_.entities_[0].ID == "MessageEntityPre" or msg.content_.entities_[0].ID == "MessageEntityItalic" then
+   if database:get('bot:markdown:mute'..msg.chat_id_) then
+    local id = msg.id_
+        local msgs = {[0] = id}
+        local chat = msg.chat_id_
+        delete_msg(chat,msgs)
+	end
+   end
    	if caption_text:match("#") then
    if database:get('bot:hashtag:mute'..msg.chat_id_) then
     local id = msg.id_
@@ -1196,6 +1228,14 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
         delete_msg(chat,msgs)
 	end
    end
+   if msg.content_.entities_[0].ID == "MessageEntityBold" or msg.content_.entities_[0].ID == "MessageEntityCode" or msg.content_.entities_[0].ID == "MessageEntityPre" or msg.content_.entities_[0].ID == "MessageEntityItalic" then
+   if database:get('bot:markdown:mute'..msg.chat_id_) then
+    local id = msg.id_
+        local msgs = {[0] = id}
+        local chat = msg.chat_id_
+        delete_msg(chat,msgs)
+	end
+   end
    	if caption_text:match("#") then
    if database:get('bot:hashtag:mute'..msg.chat_id_) then
     local id = msg.id_
@@ -1269,6 +1309,14 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
    end
    if caption_text:match("@") or msg.content_.entities_[0].ID and msg.content_.entities_[0].ID == "MessageEntityMentionName" then
    if database:get('bot:tag:mute'..msg.chat_id_) then
+    local id = msg.id_
+        local msgs = {[0] = id}
+        local chat = msg.chat_id_
+        delete_msg(chat,msgs)
+	end
+   end
+   if msg.content_.entities_[0].ID == "MessageEntityBold" or msg.content_.entities_[0].ID == "MessageEntityCode" or msg.content_.entities_[0].ID == "MessageEntityPre" or msg.content_.entities_[0].ID == "MessageEntityItalic" then
+   if database:get('bot:markdown:mute'..msg.chat_id_) then
     local id = msg.id_
         local msgs = {[0] = id}
         local chat = msg.chat_id_
@@ -1374,6 +1422,14 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
    if text:match("@") or msg.content_.entities_[0] and msg.content_.entities_[0].ID == "MessageEntityMentionName" then
    if database:get('bot:tag:mute'..msg.chat_id_) then
      local id = msg.id_
+        local msgs = {[0] = id}
+        local chat = msg.chat_id_
+        delete_msg(chat,msgs)
+	end
+   end
+   if msg.content_.entities_[0].ID == "MessageEntityBold" or msg.content_.entities_[0].ID == "MessageEntityCode" or msg.content_.entities_[0].ID == "MessageEntityPre" or msg.content_.entities_[0].ID == "MessageEntityItalic" then
+   if database:get('bot:markdown:mute'..msg.chat_id_) then
+    local id = msg.id_
         local msgs = {[0] = id}
         local chat = msg.chat_id_
         delete_msg(chat,msgs)
@@ -2368,6 +2424,10 @@ local function gpro(extra, result, success)
          send(msg.chat_id_, msg.id_, 1, '_قفل ارسال لینک پیشرفته فعال شد_', 1, 'md')
          database:set('bot:webpage:mute'..msg.chat_id_,true)
       end
+	   if lockpt[2] == "markdown" then
+         send(msg.chat_id_, msg.id_, 1, '_قفل هایپرلینک و بولد و ایتالیک فعال شد_', 1, 'md')
+         database:set('bot:markdown:mute'..msg.chat_id_,true)
+      end
 	  if lockpt[2] == "operator" then
          send(msg.chat_id_, msg.id_, 1, '_قفل اپراتور فعال شد_', 1, 'md')
          database:set('bot:operator:mute'..msg.chat_id_,true)
@@ -2419,6 +2479,10 @@ local function gpro(extra, result, success)
 	   if unlockpt[2] == "operator" then
          send(msg.chat_id_, msg.id_, 1, '_قفل اپراتور غیرفعال شد_', 1, 'md')
          database:del('bot:operator:mute'..msg.chat_id_)
+      end
+	   if unlockpt[2] == "markdown" then
+         send(msg.chat_id_, msg.id_, 1, '_قفل هایپرلینک و بولد و ایتالیک غیرفعال شد_', 1, 'md')
+         database:del('bot:markdown:mute'..msg.chat_id_)
       end
 	  if unlockpt[2] == "arabic" then
          send(msg.chat_id_, msg.id_, 1, '_قفل زبان فارسی و عربی غیرفعال شد_', 1, 'md')
@@ -2609,9 +2673,9 @@ local function gpro(extra, result, success)
 	end
 	------------
     if database:get('bot:location:mute'..msg.chat_id_) then
-	lock_location = 'Lock'
+	lock_location = 'Mute'
 	else
-	lock_location = 'UnLock'
+	lock_location = 'UnMute'
 	end
 	------------
     if database:get('bot:contact:mute'..msg.chat_id_) then
@@ -2644,6 +2708,12 @@ local function gpro(extra, result, success)
 	lock_forward = 'Unlock'
 	end
 	------------
+	if database:get('bot:markdown:mute'..msg.chat_id_) then
+	lock_markdown = 'Lock'
+	else
+	lock_markdown = 'Unlock'
+	end
+	------------
 	if database:get("bot:welcome"..msg.chat_id_) then
 	send_welcome = 'Enable'
 	else
@@ -2666,8 +2736,8 @@ local function gpro(extra, result, success)
 	          .."*Lock Hashtag(#)* --> `"..lock_htag.."`\n"
 	          .."*Lock Contact* --> `"..lock_contact.."`\n"
 	          .."*Lock English* --> `"..lock_english.."`\n"
-			  .."*Lock Operator* --> `"..lock_operator.."`\n"
-	          .."*Lock Location* --> `"..lock_location.."`\n"
+			  .."*Lock Operator* --> `"..lock_operator.."`\n" 
+              .."*Lock Markdown* --> `"..lock_markdown.."`\n"
 			  .."*Lock Sticker* --> `"..lock_sticker.."`\n"
 	          .."*Lock Bots* --> `"..mute_bots.."`\n"
 	          .."*Lock Inline* --> `"..mute_in.."`\n"
