@@ -2046,7 +2046,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 local function getpro(extra, result, success)
 local user_msgs = database:get('user:msgs'..msg.chat_id_..':'..msg.sender_user_id_)
    if result.photos_[0] then
-            sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[0].sizes_[1].photo_.persistent_id_,'_آیدی سوپرگروه_: '..msg.chat_id_..'\n_آیدی کاربری شما_: @'..msg.sender_user_username_..'\n_آیدی شما_: '..msg.sender_user_id_..'\n_تعداد پیام های ارسالی توسط شما_: '..user_msgs,msg.id_,msg.id_)
+            sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[0].sizes_[1].photo_.persistent_id_,'_آیدی سوپرگروه_: '..msg.chat_id_..'\n_آیدی شما_: '..msg.sender_user_id_..'\n_تعداد پیام های ارسالی توسط شما_: '..user_msgs,msg.id_,msg.id_)
    else
       send(msg.chat_id_, msg.id_, 1, "_آیدی گروه_: `"..msg.chat_id_.."`\n_آیدی شما_: `"..msg.sender_user_id_.."`\n_تعداد پیام های ارسالی_ : `"..user_msgs.."`", 1, 'md')
    end
