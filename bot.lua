@@ -1,6 +1,6 @@
-serpent = require("serpent")
+serpent = (loadfile "serpent.lua")()
+redis = (loadfile "lua-redis.lua")()
 lgi = require ('lgi')
-redis = require('redis')
 database = Redis.connect('127.0.0.1', 6379)
 notify = lgi.require('Notify')
 notify.init ("Telegram updates")
@@ -385,6 +385,10 @@ local function unblockUser(user_id)
     ID = "UnblockUser",
     user_id_ = user_id
   }, dl_cb, nil)
+end
+-----------------------------------------------------------------------------------------------
+ local function reload()
+loadfile("./bot.lua")()
 end
 -----------------------------------------------------------------------------------------------
 local function getBlockedUsers(offset, limit)
@@ -1368,8 +1372,8 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
 elseif msg_type == 'MSG:Text' then
  --vardump(msg)
     if database:get("bot:group:link"..msg.chat_id_) == 'Waiting For Link!\nPls Send Group Link.\n\nJoin My Channel > @Black_Ch' and is_mod(msg.sender_user_id_, msg.chat_id_) then
-      if text:match("(https://telegram.me/joinchat/%S+)") then
-	  local glink = text:match("(https://telegram.me/joinchat/%S+)")
+      if text:match("(https://telegram.me/joinchat/%S+)") or text:match("(https://t.me/joinchat/%S+)") or text:match("(https://telegram.dog/joinchat/%S+)") then
+	  local glink = text:match("(https://telegram.me/joinchat/%S+)") or text:match("(https://t.me/joinchat/%S+)") or text:match("(https://telegram.dog/joinchat/%S+)")
       local hash = "bot:group:link"..msg.chat_id_
                database:set(hash,glink)
 			  send(msg.chat_id_, msg.id_, 1, '_لینک گروه تنظیم شد_', 1, 'md')
@@ -2779,6 +2783,11 @@ local function gpro(extra, result, success)
 	local rules = database:get('bot:rules'..msg.chat_id_)
          send(msg.chat_id_, msg.id_, 1, rules, 1, nil)
     end
+        ----------------------------------------------------------------------------------------------
+	if text:match("^[#!/]reload$") and is_sudo(msg) then
+	reload()
+         send(msg.chat_id_, msg.id_, 1, '*Reloaded*', 1, 'md') 
+    end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([rR][eE][nN][Aa][mM][eE]) (.*)$") and is_owner(msg.sender_user_id_, msg.chat_id_) then
 	local txt = {string.match(text, "^[#/!]([rR][eE][nN][Aa][mM][eE]) (.*)$")} 
@@ -2871,22 +2880,22 @@ local function gpro(extra, result, success)
 	   database:set("bot:enable:"..txt[2],true)
   end
   -----------------------------------------------------------------------------------------------
-  if text:match('^[#!/]([aA][dD][dD])') and is_admin(msg.sender_user_id_, msg.chat_id_) then
-       local txt = {string.match(text, "^[#/!]([aA][dD][dD])$")} 
+ if text:match('^[#!/]add') and is_admin(msg.sender_user_id_, msg.chat_id_) then
+       local txt = {string.match(text, "^[#/!](add)$")} 
        database:set("bot:charge:"..msg.chat_id_,true)
-	   send(msg.chat_id_, msg.id_, 1, '_این گروه توسط_ : _["..msg.sender_user_id_.."]_ _به دیتابیس اضافه گردید_', 1, 'md')
+	   send(msg.chat_id_, msg.id_, 1, 'گروه به دیتابیس اضافه شد!', 1, 'md')
 	   for k,v in pairs(sudo_users) do
-	      send(v, 0, 1, "*User  "..msg.sender_user_id_.." Added bot to new group*" , 1, 'md')
+	      send(v, 0, 1, "*کاربر "..msg.sender_user_id_.." ربات را در گروه جدید ادد کرد*" , 1, 'md')
        end
 	   database:set("bot:enable:"..msg.chat_id_,true)
   end
   -----------------------------------------------------------------------------------------------
-  if text:match('^[#!/]([rR][eE][mN])') and is_admin(msg.sender_user_id_, msg.chat_id_) then
-       local txt = {string.match(text, "^[#/!]([rR][eE][mN])$")} 
+  if text:match('^[#!/]rem') and is_admin(msg.sender_user_id_, msg.chat_id_) then
+       local txt = {string.match(text, "^[#/!](rem)$")} 
        database:del("bot:charge:"..msg.chat_id_)
-	   send(msg.chat_id_, msg.id_, 1, '_این گروه توسط_ : _["..msg.sender_user_id_.."]_ _از دیتابیس حذف گردید_', 1, 'md')
+	   send(msg.chat_id_, msg.id_, 1, 'گروه از دیتابیس حذف شد!', 1, 'md')
 	   for k,v in pairs(sudo_users) do
-	      send(v, 0, 1, "*User  "..msg.sender_user_id_.." Removed bot from new group*" , 1, 'md')
+	      send(v, 0, 1, "*کاربر "..msg.sender_user_id_.." ربات را در گروه حذف کرد*" , 1, 'md')
        end
   end
   -----------------------------------------------------------------------------------------------
@@ -2899,16 +2908,16 @@ local function gpro(extra, result, success)
    -----------------------------------------------------------------------------------------------
   end
 	-----------------------------------------------------------------------------------------------
-  	if text:match("^[#!/]([dD][eE][lL]) (%d+)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
-       local delnumb = {string.match(text, "^[#/!]([dD][eE][lL]) (%d+)$")} 
-	   if tonumber(delnumb[2]) > 999 then
-			send(msg.chat_id_, msg.id_, 1, 'Error\nuse /del [1-999]', 1, 'md')
+  	if text:match("^[#!/]del (%d+)$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
+       local delnumb = {string.match(text, "^[#/!](del) (%d+)$")} 
+	   if tonumber(delnumb[2]) > 100 then
+			send(msg.chat_id_, msg.id_, 1, 'Error\nuse /del [1-100]', 1, 'md')
 else
        local id = msg.id_ - 1
         for i= id - delnumb[2] , id do 
         delete_msg(msg.chat_id_,{[0] = i})
         end
-			send(msg.chat_id_, msg.id_, 1, 'تعداد > '..delnumb[2]..' _پیام حذف گردید_.', 1, 'md')
+			send(msg.chat_id_, msg.id_, 1, 'our '..delnumb[2]..' Has Been Removed.', 1, 'md')
     end
 	end
 	-----------------------------------------------------------------------------------------------
