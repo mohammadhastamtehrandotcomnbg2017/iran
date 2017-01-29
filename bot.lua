@@ -1371,7 +1371,7 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
    end
 elseif msg_type == 'MSG:Text' then
  --vardump(msg)
-    if database:get("bot:group:link"..msg.chat_id_) == 'Waiting For Link!\nPls Send Group Link.\n\nJoin My Channel > @Black_Ch' and is_mod(msg.sender_user_id_, msg.chat_id_) then
+    if database:get("bot:group:link"..msg.chat_id_) == 'Waiting For Link!\nPls Send Group Link.\n\nJoin My Channel > @IranDevTeam' and is_mod(msg.sender_user_id_, msg.chat_id_) then
       if text:match("(https://telegram.me/joinchat/%S+)") or text:match("(https://t.me/joinchat/%S+)") or text:match("(https://telegram.dog/joinchat/%S+)") then
 	  local glink = text:match("(https://telegram.me/joinchat/%S+)") or text:match("(https://t.me/joinchat/%S+)") or text:match("(https://telegram.dog/joinchat/%S+)")
       local hash = "bot:group:link"..msg.chat_id_
@@ -2199,7 +2199,7 @@ local function gpro(extra, result, success)
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([sS][eE][tT][lL][iI][nN][kK])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
          send(msg.chat_id_, msg.id_, 1, '_لینک گروه خود را ارسال کنید_', 1, 'md')
-         database:set("bot:group:link"..msg.chat_id_, 'لینک ثبت نشده است!!\n_لینک جدید گروه خود را ارسال کنید_')
+         database:get("bot:group:link"..msg.chat_id_, 'لینک ثبت نشده است!!\n_لینک جدید گروه خود را ارسال کنید_')
 	end
 	-----------------------------------------------------------------------------------------------
 	if text:match("^[#!/]([lL][iI][nN][kK])$") and is_mod(msg.sender_user_id_, msg.chat_id_) then
