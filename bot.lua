@@ -1431,14 +1431,6 @@ if database:get('bot:forward:mute'..msg.chat_id_) then
         delete_msg(chat,msgs)
 	end
    end
-   if msg.content_.entities_[0].ID == "MessageEntityBold" or msg.content_.entities_[0].ID == "MessageEntityCode" or msg.content_.entities_[0].ID == "MessageEntityPre" or msg.content_.entities_[0].ID == "MessageEntityItalic" then
-   if database:get('bot:markdown:mute'..msg.chat_id_) then
-    local id = msg.id_
-        local msgs = {[0] = id}
-        local chat = msg.chat_id_
-        delete_msg(chat,msgs)
-	end
-   end
    	if text:match("#") then
       if database:get('bot:hashtag:mute'..msg.chat_id_) then
      local id = msg.id_
