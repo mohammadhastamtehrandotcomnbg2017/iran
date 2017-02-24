@@ -539,53 +539,38 @@ function tdcli_update_callback(data)
 	   chat_leave(msg.chat_id_, bot_id)
       end
     end
-    --------- ANTI FLOOD -------------------
-	local hash = 'flood:max:'..msg.chat_id_
-    if not database:get(hash) then
+     ----------------------------------------Anti FLood---------------------------------------------
+      --------------Flood Max --------------
+      local flmax = 'flood:max:'..msg.chat_id_
+      if not database:get(flmax) then
         floodMax = 5
-    else
-        floodMax = tonumber(database:get(hash))
-    end
-
-    local hash = 'flood:time:'..msg.chat_id_
-    if not database:get(hash) then
-        floodTime = 3
-    else
-        floodTime = tonumber(database:get(hash))
-    end
-    if not is_mod(msg.sender_user_id_, msg.chat_id_) then
-        local hashse = 'anti-flood:'..msg.chat_id_
-        if not database:get(hashse) then
-                if not is_mod(msg.sender_user_id_, msg.chat_id_) then
-                    local hash = 'flood:'..msg.sender_user_id_..':'..msg.chat_id_..':msg-num'
-                    local msgs = tonumber(database:get(hash) or 0)
-                    if msgs > (floodMax - 1) then
-                        local user = msg.sender_user_id_
-                        local chat = msg.chat_id_
-                        local channel = msg.chat_id_
-						 local user_id = msg.sender_user_id_
-						 local banned = is_banned(user_id, msg.chat_id_)
-                         if banned then
-						local id = msg.id_
-        				local msgs = {[0] = id}
-       					local chat = msg.chat_id_
-       						       del_all_msgs(msg.chat_id_, msg.sender_user_id_)
-						    else
-						 local id = msg.id_
-                         local msgs = {[0] = id}
-                         local chat = msg.chat_id_
-		                chat_kick(msg.chat_id_, msg.sender_user_id_)
-						 del_all_msgs(msg.chat_id_, msg.sender_user_id_)
-						user_id = msg.sender_user_id_
-						local bhash =  'bot:banned:'..msg.chat_id_
-                        database:sadd(bhash, user_id)
-                           send(msg.chat_id_, msg.id_, 1, '_اسپم مجاز نیست!_\n_کاربر_: *['..msg.sender_user_id_..']*\n`به دلیل اسپم بن گردید`', 1, 'md')
-					  end
-                    end
-                    database:setex(hash, floodTime, msgs+1)
-                end
+      else
+        floodMax = tonumber(database:get(flmax))
+      end
+      -----------------End-------------------
+      -----------------Msg-------------------
+      local pm = 'flood:'..msg.sender_user_id_..':'..msg.chat_id_..':msgs'
+      if not database:get(pm) then
+        msgs = 0
+      else
+        msgs = tonumber(database:get(pm))
+      end
+      -----------------End-------------------
+      ------------Flood Check Time-----------
+      local TIME_CHECK = 2
+      -----------------End-------------------
+      -------------Flood Check---------------
+      local hashflood = 'anti-flood:'..msg.chat_id_
+      if msgs > (floodMax - 1) then
+        if database:get('floodstatus'..msg.chat_id_) == 'Kicked' then
+          del_all_msgs(msg.chat_id_, msg.sender_user_id_)
+          chat_kick(msg.chat_id_, msg.sender_user_id_)
+        elseif database:get('floodstatus'..msg.chat_id_) == 'DelMsg' then
+          del_all_msgs(msg.chat_id_, msg.sender_user_id_)
+        else
+          del_all_msgs(msg.chat_id_, msg.sender_user_id_)del_all_msgs(msg.chat_id_, msg.sender_user_id_)
         end
-	end
+      end
 	-------------------------------------------
 	database:incr("bot:allmsgs")
 	if msg.chat_id_ then
@@ -606,82 +591,109 @@ function tdcli_update_callback(data)
     end
 	-------------------------------------------
     -------------* MSG TYPES *-----------------
-   if msg.content_ then
-   	if msg.reply_markup_ and  msg.reply_markup_.ID == "ReplyMarkupInlineKeyboard" then
-		print("INLINE KEYBOARD DETECTED!!")
-	msg_type = 'MSG:Inline'
-	-------------------------
-    elseif msg.content_.ID == "MessageText" then
-	text = msg.content_.text_
-		print("پیام(متن) بارگذاری شد!!")
-	msg_type = 'MSG:Text'
-	-------------------------
-	elseif msg.content_.ID == "MessagePhoto" then
-	print("عکس بارگذاری شد!!")
-	if msg.content_.caption_ then
-	caption_text = msg.content_.caption_
-	end
-	msg_type = 'MSG:Photo'
-	-------------------------
-	elseif msg.content_.ID == "MessageChatAddMembers" then
-	print("کاربر جدید ادد شده بارگذاری شد!")
-	msg_type = 'MSG:NewUserAdd'
-	-------------------------
-	elseif msg.content_.ID == "MessageChatJoinByLink" then
-		print("کاربر جدید توسط لینک بارگذاری شد!!")
-	msg_type = 'MSG:NewUserLink'
-	-------------------------
-	elseif msg.content_.ID == "MessageSticker" then
-		print("استیکر بارگذاری شد!!")
-	msg_type = 'MSG:Sticker'
-	-------------------------
-	elseif msg.content_.ID == "MessageAudio" then
-		print("موزیک بارگذاری شد!!")
-	if msg.content_.caption_ then
-	caption_text = msg.content_.caption_
-	end
-	msg_type = 'MSG:Audio'
-	-------------------------
-	elseif msg.content_.ID == "MessageVoice" then
-		print("ویس بارگذاری شد!!")
-	if msg.content_.caption_ then
-	caption_text = msg.content_.caption_
-	end
-	msg_type = 'MSG:Voice'
-	-------------------------
-	elseif msg.content_.ID == "MessageVideo" then
-		print("ویدِیو بارگذاری شد!!")
-	if msg.content_.caption_ then
-	caption_text = msg.content_.caption_
-	end
-	msg_type = 'MSG:Video'
-	-------------------------
-	elseif msg.content_.ID == "MessageAnimation" then
-		print("گیف بارگذاری شد!!")
-	if msg.content_.caption_ then
-	caption_text = msg.content_.caption_
-	end
-	msg_type = 'MSG:Gif'
-	-------------------------
-	elseif msg.content_.ID == "MessageLocation" then
-		print("مکان ارسال شده بارگذاری شد!!")
-	if msg.content_.caption_ then
-	caption_text = msg.content_.caption_
-	end
-	msg_type = 'MSG:Location'
-	-------------------------
-	elseif msg.content_.ID == "MessageChatJoinByLink" or msg.content_.ID == "MessageChatAddMembers" then
-	msg_type = 'MSG:NewUser'
-	-------------------------
-	elseif msg.content_.ID == "MessageContact" then
-		print("شماره تلفن ارسال شده بارگذاری شد!!")
-	if msg.content_.caption_ then
-	caption_text = msg.content_.caption_
-	end
-	msg_type = 'MSG:Contact'
-	-------------------------
-	end
-   end
+     if msg.content_ then
+      if msg.reply_markup_ and  msg.reply_markup_.ID == "ReplyMarkupInlineKeyboard" then
+        --if msg.reply_markup_.ID == "ReplyMarkupInlineKeyboard" then
+          print("This is [ Inline ]")
+          msg_type = 'MSG:Inline'
+        end
+        -------------------------
+        if msg.content_.ID == "MessageText" then
+          text = msg.content_.text_
+          print("This is [ Text ]")
+          msg_type = 'MSG:Text'
+        end
+        -------------------------
+        if msg.content_.ID == "MessagePhoto" then
+          print("This is [ Photo ]")
+          if msg.content_.caption_ then
+            caption_text = msg.content_.caption_
+          end
+          msg_type = 'MSG:Photo'
+        end
+        -------------------------
+        if msg.content_.ID == "MessageChatAddMembers" then
+          print("This is [ New User Add ]")
+          msg_type = 'MSG:NewUserAdd'
+        end
+        -----------------------------------
+        if msg.content_.ID == "MessageDocument" then
+          print("This is [ File Or Document ]")
+          msg_type = 'MSG:Document'
+        end
+        -------------------------
+        if msg.content_.ID == "MessageSticker" then
+          print("This is [ Sticker ]")
+          msg_type = 'MSG:Sticker'
+        end
+        -------------------------
+        if msg.content_.ID == "MessageAudio" then
+          print("This is [ Audio ]")
+          if msg.content_.caption_ then
+            caption_text = msg.content_.caption_
+          end
+          msg_type = 'MSG:Audio'
+        end
+        -------------------------
+        if msg.content_.ID == "MessageVoice" then
+          print("This is [ Voice ]")
+          if msg.content_.caption_ then
+            caption_text = msg.content_.caption_
+          end
+          msg_type = 'MSG:Voice'
+        end
+        -------------------------
+        if msg.content_.ID == "MessageVideo" then
+          print("This is [ Video ]")
+          if msg.content_.caption_ then
+            caption_text = msg.content_.caption_
+          end
+          msg_type = 'MSG:Video'
+        end
+        -------------------------
+        if msg.content_.ID == "MessageAnimation" then
+          print("This is [ Gif ]")
+          if msg.content_.caption_ then
+            caption_text = msg.content_.caption_
+          end
+          msg_type = 'MSG:Gif'
+        end
+        -------------------------
+        if msg.content_.ID == "MessageLocation" then
+          print("This is [ Location ]")
+          if msg.content_.caption_ then
+            caption_text = msg.content_.caption_
+          end
+          msg_type = 'MSG:Location'
+        end
+        -------------------------
+        if msg.content_.ID == "MessageChatJoinByLink" or msg.content_.ID == "MessageChatAddMembers" then
+          print("This is [ Msg Join ]")
+          msg_type = 'MSG:NewUser'
+        end
+        -------------------------
+        if msg.content_.ID == "MessageChatJoinByLink" then
+          print("This is [ Msg Join By Link ]")
+          msg_type = 'MSG:JoinByLink'
+        end
+        -------------------------
+        if msg.content_.ID == "MessageContact" then
+          print("This is [ Contact ]")
+          if msg.content_.caption_ then
+            caption_text = msg.content_.caption_
+          end
+          msg_type = 'MSG:Contact'
+        end
+        -------------------------
+      end
+      -------------------------------------------
+      if ((not d) and chat) then
+        if msg.content_.ID == "MessageText" then
+          do_notify (chat.title_, msg.content_.text_)
+        else
+          do_notify (chat.title_, msg.content_.ID)
+        end
+      end
     -------------------------------------------
     -------------------------------------------
     if ((not d) and chat) then
